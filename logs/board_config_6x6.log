@@ -1,0 +1,43 @@
+2026-10-19 13:11:19,624 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 13:11:19,625 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 13:11:19,812 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 13:11:19,812 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 13:11:19,812 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 13:11:19,941 - INFO - Searching for connected DAQ boards...
+2026-10-19 13:11:19,994 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 13:11:20,009 - ERROR - Serial exception on port COM3: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2026-10-19 13:11:20,009 - WARNING - Could not connect to COM3: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2026-10-19 13:11:20,009 - ERROR - Error: No serial DAQ boards found.
+2026-10-19 14:21:12,786 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 14:21:12,787 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 14:21:12,924 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 14:21:12,924 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 14:21:12,924 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 14:21:13,049 - INFO - Searching for connected DAQ boards...
+2026-10-19 14:21:13,065 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 14:21:13,065 - ERROR - Serial exception on port COM3: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2026-10-19 14:21:13,065 - WARNING - Could not connect to COM3: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2026-10-19 14:21:13,066 - ERROR - Error: No serial DAQ boards found.
+2026-10-19 14:49:52,317 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 14:49:52,318 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 14:49:52,459 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 14:49:52,460 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 14:49:52,460 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 14:49:52,579 - INFO - Searching for connected DAQ boards...
+2026-10-19 14:49:52,594 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 14:49:52,697 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 14:49:52,699 - INFO - Received UID: PICO-001
+2026-10-19 14:49:52,699 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 14:49:52,699 - INFO - Device ID = PICO-001
+2026-10-19 14:49:52,700 - INFO - Initializing board definitions for PICO-001
+2026-10-19 14:49:52,700 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 14:49:52,705 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 14:49:52,705 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 14:49:53,708 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 14:49:53,709 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 14:50:00,281 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 14:50:20,897 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 14:50:20,897 - INFO - Resetting board lasers (board number 0)
+2026-10-19 14:50:20,906 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 14:50:20,947 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 14:50:21,049 - INFO - NI DAQ task closed during cleanup.

@@ -1,6 +1,8 @@
 import json
 import os
 import __main__
+from datetime import datetime
+from pathlib import Path
 from time import sleep
 
 from pydaq.logger import log
@@ -63,4 +65,12 @@ axs[1].set_xlabel("Voltage (V)")
 axs[1].set_ylabel("Reading")
 axs[0].legend()
 axs[1].legend()
+
+# Save the plot next to this script so runs can be committed and analyzed later
+runs_dir = Path(__file__).resolve().parent / "runs"
+runs_dir.mkdir(exist_ok=True)
+plot_path = runs_dir / f"simple_sweep_{datetime.now():%Y%m%d_%H%M%S}.png"
+fig.savefig(plot_path, dpi=150, bbox_inches="tight")
+log.info(f"Saved plot to {plot_path}")
+print(f"Saved plot to {plot_path}")
 plt.show()

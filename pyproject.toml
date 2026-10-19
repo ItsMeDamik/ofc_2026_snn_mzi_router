@@ -1,0 +1,22 @@
+[project]
+name = "ofc-2026-snn-mzi-router"
+version = "0.1.0"
+description = "DAQ and photodetector sweep tooling for the OFC 2026 SNN MZI router"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "mcculw",
+    # Replace these with the real source if they are not on PyPI:
+    # "pydaq @ git+https://github.com/your-org/pydaq.git",
+    # "vivilux @ git+https://github.com/your-org/vivilux.git",
+    "pydaq",
+    "vivilux",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+package = false

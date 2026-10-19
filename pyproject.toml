@@ -2,16 +2,14 @@
 name = "ofc-2026-snn-mzi-router"
 version = "0.1.0"
 description = "DAQ and photodetector sweep tooling for the OFC 2026 SNN MZI router"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "numpy",
     "matplotlib",
     "mcculw",
-    # Replace these with the real source if they are not on PyPI:
-    # "pydaq @ git+https://github.com/your-org/pydaq.git",
-    # "vivilux @ git+https://github.com/your-org/vivilux.git",
-    "pydaq",
-    "vivilux",
+    # Installed from GitHub so the same spec works on the Mac and the Windows PC.
+    "pydaq @ git+https://github.com/ngncs-neuromorphic/pydaq.git@main",
+    "vivilux @ git+https://github.com/NeuroSumbaD/Vivilux.git@hardware_interface",
 ]
 
 [build-system]
@@ -20,3 +18,7 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 package = false
+# Vivilux points pydaq at a sibling folder (../pydaq); force the GitHub copy instead.
+override-dependencies = [
+    "pydaq @ git+https://github.com/ngncs-neuromorphic/pydaq.git@main",
+]

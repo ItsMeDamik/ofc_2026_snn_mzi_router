@@ -1,0 +1,7 @@
+switch_timing 20261019_231107: 250 kS/s, 100 ms per switch, 20 switches per direction, lasers at 10.0 V
+[2_2] A->C (PD_4_5, laser_2): rise 10-90% 32 us (range 28-32); command delay 1.01 ms (range 0.82-1.15); 20/20 clean steps
+[2_2] C->A (PD_4_5, laser_2): rise 10-90% 36 us (range 32-36); command delay 1.07 ms (range 0.80-1.19); 20/20 clean steps
+[2_2] heater command call takes 3.16 ms (Python -> Pico round trip)
+[4_2] A->D (PD_6_5, laser_4): rise 10-90% 32 us (range 28-32); command delay 1.01 ms (range 0.77-1.13); 20/20 clean steps
+[4_2] D->A (PD_6_5, laser_4): rise 10-90% 32 us (range 32-36); command delay 0.99 ms (range 0.77-1.16); 20/20 clean steps
+[4_2] heater command call takes 3.09 ms (Python -> Pico round trip)

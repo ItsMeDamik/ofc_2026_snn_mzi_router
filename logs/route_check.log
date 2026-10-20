@@ -72,3 +72,44 @@
 2026-10-19 22:23:28,503 - INFO - Resetting board lasers (board number 0)
 2026-10-19 22:23:28,510 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-19 22:23:28,546 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:08:38,771 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 23:08:38,804 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 23:08:38,941 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 23:08:38,941 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 23:08:38,941 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 23:08:39,062 - INFO - Searching for connected DAQ boards...
+2026-10-19 23:08:39,078 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 23:08:39,180 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 23:08:39,182 - INFO - Received UID: PICO-001
+2026-10-19 23:08:39,182 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 23:08:39,183 - INFO - Device ID = PICO-001
+2026-10-19 23:08:39,183 - INFO - Initializing board definitions for PICO-001
+2026-10-19 23:08:39,183 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 23:08:39,188 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 23:08:39,188 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 23:08:40,193 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 23:08:40,193 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 23:08:40,230 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:08:40,230 - INFO - route_check 20261019_230840: cores ['C1', 'C2', 'C3', 'C4', 'C5'] on rows [2, 3, 4, 5, 6], receivers ['PD_1_5', 'PD_3_5', 'PD_4_5', 'PD_5_5', 'PD_6_5']; lasers laser_2 10.00 V, laser_3 10.00 V, laser_4 10.00 V, laser_5 10.00 V, laser_6 10.00 V
+2026-10-19 23:08:41,307 - INFO - [A] C2 -> C3+C4; C4 -> C5 | not BAR: 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+2026-10-19 23:08:41,392 - INFO - Detector readout mode: slow
+2026-10-19 23:09:12,584 - INFO - [A]   C2: on-target 98%, split C3:C4 = 0.90 (-0.4 dB) | C4: on-target 96%
+2026-10-19 23:09:12,585 - INFO - [A]   signal/crosstalk: C3 16.8 dB, C4 20.1 dB, C5 >=27.1 dB; row-1 leak up to 0.9%; lasers together vs sum 29.3% -> FAIL
+2026-10-19 23:09:12,585 - INFO - [A]   laser power with both on vs alone: C2 +2%, C4 +5%
+2026-10-19 23:09:13,651 - INFO - [B] C1 -> C3+C4; C3 -> C5 | not BAR: 2_2 X, 4_2 X, 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+2026-10-19 23:09:44,942 - INFO - [B]   C1: on-target 99%, split C3:C4 = 0.92 (-0.3 dB) | C3: on-target 97%
+2026-10-19 23:09:44,942 - INFO - [B]   signal/crosstalk: C3 18.6 dB, C4 23.8 dB, C5 >=27.8 dB; row-1 leak up to 0.3%; lasers together vs sum 7.3% -> FAIL
+2026-10-19 23:09:44,942 - INFO - [B]   laser power with both on vs alone: C1 -2%, C3 +1%
+2026-10-19 23:09:46,014 - INFO - [C] C1 -> C3+C4; C4 -> C5 | not BAR: 2_2 X, 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+2026-10-19 23:10:17,433 - INFO - [C]   C1: on-target 99%, split C3:C4 = 0.91 (-0.4 dB) | C4: on-target 97%
+2026-10-19 23:10:17,433 - INFO - [C]   signal/crosstalk: C3 17.7 dB, C4 20.8 dB, C5 >=27.5 dB; row-1 leak up to 0.3%; lasers together vs sum 4.2% -> PASS
+2026-10-19 23:10:17,434 - INFO - [C]   laser power with both on vs alone: C1 +1%, C4 +0%
+2026-10-19 23:10:18,516 - INFO - [D] C2 -> C3+C4; C3 -> C5 | not BAR: 4_2 X, 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+2026-10-19 23:10:49,864 - INFO - [D]   C2: on-target 97%, split C3:C4 = 0.91 (-0.4 dB) | C3: on-target 96%
+2026-10-19 23:10:49,865 - INFO - [D]   signal/crosstalk: C3 16.8 dB, C4 14.4 dB, C5 16.9 dB; row-1 leak up to 0.6%; lasers together vs sum 8.3% -> FAIL
+2026-10-19 23:10:49,866 - INFO - [D]   laser power with both on vs alone: C2 -5%, C3 +0%
+2026-10-19 23:10:50,906 - INFO - Saved route_check_20261019_230840.npz/.json/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 23:10:50,906 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 23:10:50,906 - INFO - Resetting board lasers (board number 0)
+2026-10-19 23:10:50,912 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 23:10:50,946 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

@@ -1,0 +1,30 @@
+2026-10-19 23:11:06,416 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 23:11:06,417 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 23:11:06,566 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 23:11:06,566 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 23:11:06,566 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 23:11:06,697 - INFO - Searching for connected DAQ boards...
+2026-10-19 23:11:06,713 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 23:11:06,815 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 23:11:06,815 - INFO - Received UID: PICO-001
+2026-10-19 23:11:06,832 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 23:11:06,833 - INFO - Device ID = PICO-001
+2026-10-19 23:11:06,833 - INFO - Initializing board definitions for PICO-001
+2026-10-19 23:11:06,833 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 23:11:06,834 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 23:11:06,834 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 23:11:07,836 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 23:11:07,837 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 23:11:07,879 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:11:07,879 - INFO - switch_timing 20261019_231107: 250 kS/s, 100 ms per switch, 20 switches per direction, lasers at 10.0 V
+2026-10-19 23:11:26,414 - INFO - [2_2] A->C (PD_4_5, laser_2): rise 10-90% 32 us (range 28-32); command delay 1.01 ms (range 0.82-1.15); 20/20 clean steps
+2026-10-19 23:11:26,419 - INFO - [2_2] C->A (PD_4_5, laser_2): rise 10-90% 36 us (range 32-36); command delay 1.07 ms (range 0.80-1.19); 20/20 clean steps
+2026-10-19 23:11:26,423 - INFO - [2_2] heater command call takes 3.16 ms (Python -> Pico round trip)
+2026-10-19 23:11:44,959 - INFO - [4_2] A->D (PD_6_5, laser_4): rise 10-90% 32 us (range 28-32); command delay 1.01 ms (range 0.77-1.13); 20/20 clean steps
+2026-10-19 23:11:44,959 - INFO - [4_2] D->A (PD_6_5, laser_4): rise 10-90% 32 us (range 32-36); command delay 0.99 ms (range 0.77-1.16); 20/20 clean steps
+2026-10-19 23:11:44,960 - INFO - [4_2] heater command call takes 3.09 ms (Python -> Pico round trip)
+2026-10-19 23:11:46,481 - INFO - Saved switch_timing_20261019_231107.npz/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 23:11:46,481 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 23:11:46,481 - INFO - Resetting board lasers (board number 0)
+2026-10-19 23:11:46,487 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 23:11:46,520 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

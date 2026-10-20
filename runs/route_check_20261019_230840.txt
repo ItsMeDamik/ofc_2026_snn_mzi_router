@@ -1,0 +1,18 @@
+route_check 20261019_230840: cores ['C1', 'C2', 'C3', 'C4', 'C5'] on rows [2, 3, 4, 5, 6], receivers ['PD_1_5', 'PD_3_5', 'PD_4_5', 'PD_5_5', 'PD_6_5']; lasers laser_2 10.00 V, laser_3 10.00 V, laser_4 10.00 V, laser_5 10.00 V, laser_6 10.00 V
+[A] C2 -> C3+C4; C4 -> C5 | not BAR: 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+Detector readout mode: slow
+[A]   C2: on-target 98%, split C3:C4 = 0.90 (-0.4 dB) | C4: on-target 96%
+[A]   signal/crosstalk: C3 16.8 dB, C4 20.1 dB, C5 >=27.1 dB; row-1 leak up to 0.9%; lasers together vs sum 29.3% -> FAIL
+[A]   laser power with both on vs alone: C2 +2%, C4 +5%
+[B] C1 -> C3+C4; C3 -> C5 | not BAR: 2_2 X, 4_2 X, 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+[B]   C1: on-target 99%, split C3:C4 = 0.92 (-0.3 dB) | C3: on-target 97%
+[B]   signal/crosstalk: C3 18.6 dB, C4 23.8 dB, C5 >=27.8 dB; row-1 leak up to 0.3%; lasers together vs sum 7.3% -> FAIL
+[B]   laser power with both on vs alone: C1 -2%, C3 +1%
+[C] C1 -> C3+C4; C4 -> C5 | not BAR: 2_2 X, 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+[C]   C1: on-target 99%, split C3:C4 = 0.91 (-0.4 dB) | C4: on-target 97%
+[C]   signal/crosstalk: C3 17.7 dB, C4 20.8 dB, C5 >=27.5 dB; row-1 leak up to 0.3%; lasers together vs sum 4.2% -> PASS
+[C]   laser power with both on vs alone: C1 +1%, C4 +0%
+[D] C2 -> C3+C4; C3 -> C5 | not BAR: 4_2 X, 3_3 X (7 deg short), 5_3 X (4 deg short), 4_4 S
+[D]   C2: on-target 97%, split C3:C4 = 0.91 (-0.4 dB) | C3: on-target 96%
+[D]   signal/crosstalk: C3 16.8 dB, C4 14.4 dB, C5 16.9 dB; row-1 leak up to 0.6%; lasers together vs sum 8.3% -> FAIL
+[D]   laser power with both on vs alone: C2 -5%, C3 +0%

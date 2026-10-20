@@ -1,0 +1,37 @@
+2026-10-19 21:48:52,814 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 21:48:52,815 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 21:48:52,950 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 21:48:52,950 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 21:48:52,951 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 21:48:53,098 - INFO - Searching for connected DAQ boards...
+2026-10-19 21:48:53,117 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 21:48:53,220 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 21:48:53,222 - INFO - Received UID: PICO-001
+2026-10-19 21:48:53,223 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 21:48:53,223 - INFO - Device ID = PICO-001
+2026-10-19 21:48:53,223 - INFO - Initializing board definitions for PICO-001
+2026-10-19 21:48:53,223 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 21:48:53,227 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 21:48:53,228 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 21:48:54,231 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 21:48:54,233 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 21:48:54,403 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 21:48:54,403 - INFO - route_check 20261019_214854: cores ['C1', 'C2', 'C3', 'C4', 'C5'] on rows [2, 3, 4, 5, 6], receivers ['PD_1_5', 'PD_3_5', 'PD_4_5', 'PD_5_5', 'PD_6_5']; lasers laser_2 9.72 V, laser_3 9.73 V, laser_4 9.44 V, laser_5 9.23 V, laser_6 9.03 V
+2026-10-19 21:48:55,472 - INFO - [A] C2 -> C3+C4; C4 -> C5 | not BAR: 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+2026-10-19 21:49:26,795 - INFO - [A]   C2: on-target 80%, split C3:C4 = 0.66 (-1.8 dB) | C4: on-target 64%
+2026-10-19 21:49:26,796 - INFO - [A]   signal/crosstalk: C3 12.2 dB, C4 4.0 dB, C5 6.4 dB; row-1 leak up to 22.6%; lasers together vs sum 19.6% -> FAIL
+2026-10-19 21:49:27,892 - INFO - [B] C1 -> C3+C4; C3 -> C5 | not BAR: 2_2 X, 4_2 X, 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+2026-10-19 21:49:59,407 - INFO - [B]   C1: on-target 81%, split C3:C4 = 0.76 (-1.2 dB) | C3: on-target 71%
+2026-10-19 21:49:59,408 - INFO - [B]   signal/crosstalk: C3 15.6 dB, C4 3.5 dB, C5 6.9 dB; row-1 leak up to 24.7%; lasers together vs sum 9.0% -> FAIL
+2026-10-19 21:50:00,505 - INFO - [C] C1 -> C3+C4; C4 -> C5 | not BAR: 2_2 X, 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+2026-10-19 21:50:31,908 - INFO - [C]   C1: on-target 81%, split C3:C4 = 0.76 (-1.2 dB) | C4: on-target 65%
+2026-10-19 21:50:31,909 - INFO - [C]   signal/crosstalk: C3 12.7 dB, C4 3.3 dB, C5 7.1 dB; row-1 leak up to 22.6%; lasers together vs sum 19.2% -> FAIL
+2026-10-19 21:50:32,986 - INFO - [D] C2 -> C3+C4; C3 -> C5 | not BAR: 4_2 X, 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+2026-10-19 21:51:04,535 - INFO - [D]   C2: on-target 79%, split C3:C4 = 0.66 (-1.8 dB) | C3: on-target 71%
+2026-10-19 21:51:04,535 - INFO - [D]   signal/crosstalk: C3 14.4 dB, C4 4.0 dB, C5 5.7 dB; row-1 leak up to 24.7%; lasers together vs sum 7.6% -> FAIL
+2026-10-19 21:51:05,645 - INFO - Saved route_check_20261019_214854.npz/.json/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 21:51:05,645 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 21:51:05,645 - INFO - Resetting board lasers (board number 0)
+2026-10-19 21:51:05,651 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 21:51:05,688 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 21:51:05,774 - INFO - NI DAQ task closed during cleanup.

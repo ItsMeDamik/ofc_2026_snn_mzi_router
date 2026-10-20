@@ -1,0 +1,13 @@
+route_check 20261019_214854: cores ['C1', 'C2', 'C3', 'C4', 'C5'] on rows [2, 3, 4, 5, 6], receivers ['PD_1_5', 'PD_3_5', 'PD_4_5', 'PD_5_5', 'PD_6_5']; lasers laser_2 9.72 V, laser_3 9.73 V, laser_4 9.44 V, laser_5 9.23 V, laser_6 9.03 V
+[A] C2 -> C3+C4; C4 -> C5 | not BAR: 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+[A]   C2: on-target 80%, split C3:C4 = 0.66 (-1.8 dB) | C4: on-target 64%
+[A]   signal/crosstalk: C3 12.2 dB, C4 4.0 dB, C5 6.4 dB; row-1 leak up to 22.6%; lasers together vs sum 19.6% -> FAIL
+[B] C1 -> C3+C4; C3 -> C5 | not BAR: 2_2 X, 4_2 X, 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+[B]   C1: on-target 81%, split C3:C4 = 0.76 (-1.2 dB) | C3: on-target 71%
+[B]   signal/crosstalk: C3 15.6 dB, C4 3.5 dB, C5 6.9 dB; row-1 leak up to 24.7%; lasers together vs sum 9.0% -> FAIL
+[C] C1 -> C3+C4; C4 -> C5 | not BAR: 2_2 X, 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+[C]   C1: on-target 81%, split C3:C4 = 0.76 (-1.2 dB) | C4: on-target 65%
+[C]   signal/crosstalk: C3 12.7 dB, C4 3.3 dB, C5 7.1 dB; row-1 leak up to 22.6%; lasers together vs sum 19.2% -> FAIL
+[D] C2 -> C3+C4; C3 -> C5 | not BAR: 4_2 X, 3_3 X (7 deg short), 5_3 X (6 deg short), 4_4 S
+[D]   C2: on-target 79%, split C3:C4 = 0.66 (-1.8 dB) | C3: on-target 71%
+[D]   signal/crosstalk: C3 14.4 dB, C4 4.0 dB, C5 5.7 dB; row-1 leak up to 24.7%; lasers together vs sum 7.6% -> FAIL

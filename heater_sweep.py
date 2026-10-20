@@ -160,10 +160,10 @@ def main() -> None:
                 for i, hv in enumerate(volts):
                     netlist[heater].vout(float(hv))
                     sleep(args.ps_delay)
-                    v[i] = netlist.group_vin(PD_NETS)
+                    v[i] = cs.read_pds()
                 netlist[heater].vout(0.0)
                 sleep(RETURN_S)
-                back = netlist.group_vin(PD_NETS)  # back at 0 V: does the MZI return to its start?
+                back = cs.read_pds()  # back at 0 V: does the MZI return to its start?
 
                 I = to_nA(v, dark)
                 T = I / I[:, [k]]  # every detector relative to this laser's input

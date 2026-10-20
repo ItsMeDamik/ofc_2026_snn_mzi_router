@@ -17,6 +17,7 @@
         python check_setup.py --quick    # shorter settle/stability times, about 6 min
 '''
 import argparse
+import atexit
 from datetime import datetime
 from pathlib import Path
 from time import monotonic, sleep
@@ -46,6 +47,9 @@ OFF_WAIT_S = 5.0     # wait after switching lasers off before the next measureme
 STEP3_TOL = 0.10     # step 3: each input within +-10% of the sum of the step 2 single-laser readings
 DRIFT_TOL = 0.02     # step 4: drift after warm-up below 2%
 JUMP_TOL = 0.03      # step 4: a change above 3% between consecutive 5 s means counts as a jump
+READ_SAMPLES = 20    # samples per channel averaged in one read_pds() call
+READ_RATE = 1000.0   # scans per second (each scan covers every channel twice)
+CONVERT_RATE = 100e3 # NI conversions per second: 10 us per channel to settle
 
 summary: list[str] = []
 
@@ -75,6 +79,46 @@ def set_laser_range() -> None:
                       BoardInfo.DACRANGE, laser_board.ao_range)
 
 
+_reader = None
+
+
+def read_pds() -> np.ndarray:
+    '''Reads every photodetector (PD_NETS order) in volts, averaged over READ_SAMPLES.
+
+        The NI board scans its channels through one shared input, and a channel read right
+        after a bright one inherits about a third of that channel's level (measured
+        2026-10-19, route_check). So each channel is scanned twice in a row and only the
+        second reading is kept, with a slower conversion clock for settling.
+    '''
+    global _reader
+    if _reader is None:
+        try:
+            import nidaqmx
+            from nidaqmx.constants import AcquisitionType
+            ni = netlist.board_dict["NI"]
+            task = nidaqmx.Task()
+            for net in PD_NETS:
+                chan = f"{ni.board_num}/ai{netlist.pins_dict[net].chnl}"
+                for _ in range(2):
+                    task.ai_channels.add_ai_voltage_chan(chan, min_val=ni.min_val, max_val=ni.max_val,
+                                                         terminal_config=ni.terminal_config)
+            task.timing.cfg_samp_clk_timing(rate=READ_RATE, sample_mode=AcquisitionType.FINITE,
+                                            samps_per_chan=READ_SAMPLES)
+            task.timing.ai_conv_rate = CONVERT_RATE
+            atexit.register(task.close)
+            _reader = task
+        except Exception as err:  # no NI hardware (e.g. a simulation): fall back to pydaq
+            report(f"WARNING: double-read NI task unavailable ({err}); falling back to pydaq group_vin, "
+                   f"which lets each channel pick up part of the previous one")
+            _reader = False
+    if _reader is False:
+        return netlist.group_vin(PD_NETS)
+    _reader.start()
+    data = np.array(_reader.read(number_of_samples_per_channel=READ_SAMPLES))
+    _reader.stop()
+    return data[1::2].mean(axis=1)  # second reading of each channel
+
+
 def record(duration_s: float, period_s: float) -> tuple[np.ndarray, np.ndarray]:
     '''Reads every photodetector once per period for duration_s seconds.
 
@@ -84,7 +128,7 @@ def record(duration_s: float, period_s: float) -> tuple[np.ndarray, np.ndarray]:
     start = monotonic()
     while (now := monotonic() - start) < duration_s:
         times.append(now)
-        volts.append(netlist.group_vin(PD_NETS))
+        volts.append(read_pds())
         sleep(max(0.0, period_s - (monotonic() - start - now)))
     return np.array(times), np.array(volts)
 

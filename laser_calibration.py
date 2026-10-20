@@ -53,7 +53,7 @@ def power_curves(dark: np.ndarray) -> np.ndarray:
         for i, v in enumerate(CURVE_V):
             set_one(k, v)
             sleep(CURVE_ON_S)
-            volts[k, i] = netlist.group_vin(PD_NETS)
+            volts[k, i] = cs.read_pds()
             set_one(k, 0.0)
             sleep(CURVE_OFF_S)
     if np.nanmin(volts) < HEADROOM_V:
@@ -80,7 +80,7 @@ def measure_read_time() -> float:
     times = []
     for _ in range(7):
         start = monotonic()
-        netlist.group_vin(PD_NETS)
+        cs.read_pds()
         times.append(monotonic() - start)
     return float(np.median(times))
 
@@ -97,11 +97,11 @@ def pulse_train(k: int, v_on: float, v_off: float, period_s: float, on_s: float,
     for p in range(max(1, int(TRAIN_S / period_s))):
         t_pulse = start + p * period_s
         sleep(max(0.0, t_pulse - read_s - monotonic()))
-        bases.append(netlist.group_vin(PD_NETS)[k])
+        bases.append(cs.read_pds()[k])
         sleep(max(0.0, t_pulse - monotonic()))
         set_one(k, v_on)
         sleep(max(0.0, on_s - read_s))  # the read fills the end of the pulse
-        tops.append(netlist.group_vin(PD_NETS)[k])
+        tops.append(cs.read_pds()[k])
         set_one(k, v_off)
     return np.array(tops), np.array(bases)
 

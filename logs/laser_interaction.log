@@ -29,3 +29,34 @@
 2026-10-19 22:51:24,834 - INFO - Resetting board lasers (board number 0)
 2026-10-19 22:51:24,840 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-19 22:51:24,878 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:54:03,394 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 22:54:03,396 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 22:54:03,535 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 22:54:03,535 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 22:54:03,535 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 22:54:03,640 - INFO - Searching for connected DAQ boards...
+2026-10-19 22:54:03,656 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 22:54:03,759 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 22:54:03,760 - INFO - Received UID: PICO-001
+2026-10-19 22:54:03,761 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 22:54:03,761 - INFO - Device ID = PICO-001
+2026-10-19 22:54:03,761 - INFO - Initializing board definitions for PICO-001
+2026-10-19 22:54:03,761 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 22:54:03,765 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 22:54:03,766 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 22:54:04,770 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 22:54:04,770 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 22:54:04,786 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:54:09,897 - INFO - Detector readout mode: slow
+2026-10-19 22:54:12,830 - INFO - laser_interaction 20261019_225404: lasers [2, 3, 4, 5, 6] at 9.67 V, 9.93 V, 9.71 V, 9.26 V, 9.14 V; each other laser toggled 3x (3 s on / 3 s off)
+2026-10-19 22:55:34,640 - INFO -   laser_2 power when another laser turns on (fast/settled): laser_3 +8.1/+8.5%, laser_4 +1.5/+1.5%, laser_5 -3.5/-3.8%, laser_6 -3.6/-3.7%
+2026-10-19 22:56:58,518 - INFO -   laser_3 power when another laser turns on (fast/settled): laser_2 -3.4/-3.6%, laser_4 -3.0/-3.6%, laser_5 -4.6/-4.5%, laser_6 -4.6/-4.6%
+2026-10-19 22:58:22,336 - INFO -   laser_4 power when another laser turns on (fast/settled): laser_2 -0.1/-0.1%, laser_3 +6.8/+6.5%, laser_5 -3.9/-4.1%, laser_6 -3.9/-4.1%
+2026-10-19 22:59:45,881 - INFO -   laser_5 power when another laser turns on (fast/settled): laser_2 +18.1/+18.8%, laser_3 +31.1/+31.6%, laser_4 +19.6/+20.2%, laser_6 -2.2/-2.6%
+2026-10-19 23:01:09,644 - INFO -   laser_6 power when another laser turns on (fast/settled): laser_2 +22.2/+22.8%, laser_3 +36.7/+37.4%, laser_4 +24.7/+25.4%, laser_5 +3.7/+3.3%
+2026-10-19 23:01:11,645 - INFO - Largest settled change 37.4% -> lasers affect each other
+2026-10-19 23:01:12,345 - INFO - Saved laser_interaction_20261019_225404.npz/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 23:01:12,345 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 23:01:12,345 - INFO - Resetting board lasers (board number 0)
+2026-10-19 23:01:12,351 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 23:01:12,387 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

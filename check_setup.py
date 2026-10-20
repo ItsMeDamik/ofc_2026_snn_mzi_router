@@ -47,9 +47,8 @@ OFF_WAIT_S = 5.0     # wait after switching lasers off before the next measureme
 STEP3_TOL = 0.10     # step 3: each input within +-10% of the sum of the step 2 single-laser readings
 DRIFT_TOL = 0.02     # step 4: drift after warm-up below 2%
 JUMP_TOL = 0.03      # step 4: a change above 3% between consecutive 5 s means counts as a jump
-READ_SAMPLES = 20    # samples per channel averaged in one read_pds() call
-READ_RATE = 1000.0   # scans per second (each scan covers every channel twice)
-CONVERT_RATE = 100e3 # NI conversions per second: 10 us per channel to settle
+# read_pds() modes, tried in order: (mode, reads per channel, scans/s, samples, conversions/s)
+READ_MODES = [("slow", 1, 400.0, 10, 10e3)]       # each channel waits 100 us before it is converted
 
 summary: list[str] = []
 
@@ -80,43 +79,66 @@ def set_laser_range() -> None:
 
 
 _reader = None
+READ_MODE = None   # which read_pds() mode is in use, for the run summaries
+
+
+def _open_reader(mode, reads, rate, samples, conv_rate):
+    '''Creates the NI task for one read_pds() mode.'''
+    import nidaqmx
+    from nidaqmx.constants import AcquisitionType
+    ni = netlist.board_dict["NI"]
+    task = nidaqmx.Task()
+    try:
+        for net in PD_NETS:
+            chan = f"{ni.board_num}/ai{netlist.pins_dict[net].chnl}"
+            for r in range(reads):  # a channel may appear twice, but every copy needs its own name
+                task.ai_channels.add_ai_voltage_chan(chan, name_to_assign_to_channel=f"{net}_{r}",
+                                                     min_val=ni.min_val, max_val=ni.max_val,
+                                                     terminal_config=ni.terminal_config)
+        task.timing.cfg_samp_clk_timing(rate=rate, sample_mode=AcquisitionType.FINITE, samps_per_chan=samples)
+        task.timing.ai_conv_rate = conv_rate
+        task.start()   # fail here, not mid-measurement, if the board refuses the settings
+        task.read(number_of_samples_per_channel=samples)
+        task.stop()
+    except Exception:
+        task.close()
+        raise
+    atexit.register(task.close)
+    return task
 
 
 def read_pds() -> np.ndarray:
-    '''Reads every photodetector (PD_NETS order) in volts, averaged over READ_SAMPLES.
+    '''Reads every photodetector (PD_NETS order) in volts, averaged over a few samples.
 
         The NI board scans its channels through one shared input, and a channel read right
         after a bright one inherits about a third of that channel's level (measured
-        2026-10-19, route_check). So each channel is scanned twice in a row and only the
-        second reading is kept, with a slower conversion clock for settling.
+        2026-10-19, route_check): the leftover charge has not drained when it is converted.
+        So the conversion clock is slowed to give every channel 100 us to settle.
+        pydaq's group_vin (with the carry-over) is the fallback if this task cannot start.
     '''
-    global _reader
+    global _reader, READ_MODE
     if _reader is None:
-        try:
-            import nidaqmx
-            from nidaqmx.constants import AcquisitionType
-            ni = netlist.board_dict["NI"]
-            task = nidaqmx.Task()
-            for net in PD_NETS:
-                chan = f"{ni.board_num}/ai{netlist.pins_dict[net].chnl}"
-                for _ in range(2):
-                    task.ai_channels.add_ai_voltage_chan(chan, min_val=ni.min_val, max_val=ni.max_val,
-                                                         terminal_config=ni.terminal_config)
-            task.timing.cfg_samp_clk_timing(rate=READ_RATE, sample_mode=AcquisitionType.FINITE,
-                                            samps_per_chan=READ_SAMPLES)
-            task.timing.ai_conv_rate = CONVERT_RATE
-            atexit.register(task.close)
-            _reader = task
-        except Exception as err:  # no NI hardware (e.g. a simulation): fall back to pydaq
-            report(f"WARNING: double-read NI task unavailable ({err}); falling back to pydaq group_vin, "
-                   f"which lets each channel pick up part of the previous one")
-            _reader = False
+        errors = []
+        for mode, reads, rate, samples, conv_rate in READ_MODES:
+            try:
+                _reader = (_open_reader(mode, reads, rate, samples, conv_rate), reads, samples)
+                READ_MODE = mode
+                break
+            except Exception as err:
+                errors.append(f"{mode}: {err}")
+        if READ_MODE is None:
+            _reader, READ_MODE = False, "pydaq"
+            report("WARNING: NI reader setup failed, falling back to pydaq group_vin, which lets each channel "
+                   "pick up part of the previous one. Errors: " + " | ".join(errors))
+        else:
+            report(f"Detector readout mode: {READ_MODE}" + (f" (failed first: {' | '.join(errors)})" if errors else ""))
     if _reader is False:
         return netlist.group_vin(PD_NETS)
-    _reader.start()
-    data = np.array(_reader.read(number_of_samples_per_channel=READ_SAMPLES))
-    _reader.stop()
-    return data[1::2].mean(axis=1)  # second reading of each channel
+    task, reads, samples = _reader
+    task.start()
+    data = np.array(task.read(number_of_samples_per_channel=samples))
+    task.stop()
+    return data[reads - 1::reads].mean(axis=1)  # last reading of each channel
 
 
 def record(duration_s: float, period_s: float) -> tuple[np.ndarray, np.ndarray]:

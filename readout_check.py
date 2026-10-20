@@ -2,8 +2,8 @@
 
     The NI board reads its channels one after another through one shared input. With
     pydaq's group_vin, a channel read right after a bright one showed about a third of that
-    channel's level (route_check, 2026-10-19). check_setup.read_pds() reads each channel
-    twice and keeps the second reading. This script lights each laser alone and compares
+    channel's level (route_check, 2026-10-19). check_setup.read_pds() slows the board's
+    conversion clock so each channel has 100 us to settle. This script lights each laser alone and compares
     both readers on the channel scanned right after that laser's input detector, which
     should be dark.
 
@@ -34,8 +34,8 @@ def main() -> None:
             for net in cs.HEATER_NETS:
                 netlist[net].vout(0.0)
             sleep(cs.OFF_WAIT_S)
+            dark_new = np.mean([cs.read_pds() for _ in range(10)], axis=0)   # set up the new reader first
             dark_old = np.mean([netlist.group_vin(PD_NETS) for _ in range(10)], axis=0)
-            dark_new = np.mean([cs.read_pds() for _ in range(10)], axis=0)
             report(f"readout_check {stamp}: each laser alone at {LASER_V} V; carry-over onto the next-scanned channel")
             for k, net in enumerate(LASER_NETS):
                 own = PD_NETS.index(INPUT_PDS[k])
@@ -48,7 +48,7 @@ def main() -> None:
                 sleep(1.0)
                 r_old, r_new = old[nxt] / old[own], new[nxt] / new[own]
                 report(f"  {net}: {PD_NETS[own]} {new[own]:.0f} nA -> next {PD_NETS[nxt]}: "
-                       f"group_vin {100 * r_old:.1f}%, read_pds {100 * r_new:.1f}% -> {verdict(abs(r_new) < GOOD)}")
+                       f"group_vin {100 * r_old:.1f}%, read_pds ({cs.READ_MODE}) {100 * r_new:.1f}% -> {verdict(abs(r_new) < GOOD)}")
         finally:
             set_lasers(0.0)
             out.write_text("\n".join(cs.summary) + "\n")

@@ -1,0 +1,11 @@
+stream_check 20261019_232447: setting A, 80 pulses ([5, 10, 20, 50] ms) on laser_3 and laser_5, 10 detectors at 800 scans/s for 4.1 s
+  PD_3_0 (laser_3, on 2227 nA): 5 ms 10/10 (delay 2.0±0.4 ms, length +0.0 ms); 10 ms 10/10 (delay 1.7±0.5 ms, length +0.0 ms); 20 ms 10/10 (delay 1.6±0.4 ms, length +0.0 ms); 50 ms 10/10 (delay 1.7±0.5 ms, length +0.4 ms); false 0 -> PASS
+  PD_5_0 (laser_5, on 2941 nA): 5 ms 10/10 (delay 1.7±0.5 ms, length +0.1 ms); 10 ms 10/10 (delay 2.0±0.3 ms, length -0.0 ms); 20 ms 10/10 (delay 1.9±0.3 ms, length +0.0 ms); 50 ms 10/10 (delay 1.4±0.5 ms, length -0.2 ms); false 0 -> PASS
+  PD_4_5 (laser_3, on 600 nA): 5 ms 10/10 (delay 1.7±0.4 ms, length -0.0 ms); 10 ms 10/10 (delay 1.5±0.4 ms, length +0.1 ms); 20 ms 10/10 (delay 1.5±0.4 ms, length +0.0 ms); 50 ms 10/10 (delay 1.5±0.3 ms, length +0.4 ms); false 0 -> PASS
+  PD_5_5 (laser_3, on 658 nA): 5 ms 10/10 (delay 1.7±0.4 ms, length -0.0 ms); 10 ms 10/10 (delay 1.5±0.4 ms, length +0.1 ms); 20 ms 10/10 (delay 1.5±0.4 ms, length +0.0 ms); 50 ms 10/10 (delay 1.5±0.3 ms, length +0.4 ms); false 0 -> PASS
+  PD_6_5 (laser_5, on 1551 nA): 5 ms 10/10 (delay 1.5±0.4 ms, length -0.4 ms); 10 ms 10/10 (delay 1.6±0.5 ms, length -0.0 ms); 20 ms 10/10 (delay 1.5±0.5 ms, length +0.0 ms); 50 ms 10/10 (delay 1.3±0.5 ms, length -0.2 ms); false 0 -> PASS
+  PD_2_0 (no laser routed here): largest signal 31 nA above dark
+  PD_4_0 (no laser routed here): largest signal 199 nA above dark
+  PD_6_0 (no laser routed here): largest signal 210 nA above dark
+  PD_1_5 (no laser routed here): largest signal 12 nA above dark
+  PD_3_5 (no laser routed here): largest signal 450 nA above dark

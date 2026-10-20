@@ -1,0 +1,34 @@
+2026-10-19 23:24:45,392 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 23:24:45,393 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 23:24:45,527 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 23:24:45,527 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 23:24:45,527 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 23:24:45,656 - INFO - Searching for connected DAQ boards...
+2026-10-19 23:24:45,673 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 23:24:45,775 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 23:24:45,776 - INFO - Received UID: PICO-001
+2026-10-19 23:24:45,803 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 23:24:45,803 - INFO - Device ID = PICO-001
+2026-10-19 23:24:45,803 - INFO - Initializing board definitions for PICO-001
+2026-10-19 23:24:45,803 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 23:24:45,805 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 23:24:45,806 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 23:24:46,808 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 23:24:46,808 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 23:24:47,652 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:24:49,691 - INFO - stream_check 20261019_232447: setting A, 80 pulses ([5, 10, 20, 50] ms) on laser_3 and laser_5, 10 detectors at 800 scans/s for 4.1 s
+2026-10-19 23:24:53,824 - INFO -   PD_3_0 (laser_3, on 2227 nA): 5 ms 10/10 (delay 2.0±0.4 ms, length +0.0 ms); 10 ms 10/10 (delay 1.7±0.5 ms, length +0.0 ms); 20 ms 10/10 (delay 1.6±0.4 ms, length +0.0 ms); 50 ms 10/10 (delay 1.7±0.5 ms, length +0.4 ms); false 0 -> PASS
+2026-10-19 23:24:53,832 - INFO -   PD_5_0 (laser_5, on 2941 nA): 5 ms 10/10 (delay 1.7±0.5 ms, length +0.1 ms); 10 ms 10/10 (delay 2.0±0.3 ms, length -0.0 ms); 20 ms 10/10 (delay 1.9±0.3 ms, length +0.0 ms); 50 ms 10/10 (delay 1.4±0.5 ms, length -0.2 ms); false 0 -> PASS
+2026-10-19 23:24:53,842 - INFO -   PD_4_5 (laser_3, on 600 nA): 5 ms 10/10 (delay 1.7±0.4 ms, length -0.0 ms); 10 ms 10/10 (delay 1.5±0.4 ms, length +0.1 ms); 20 ms 10/10 (delay 1.5±0.4 ms, length +0.0 ms); 50 ms 10/10 (delay 1.5±0.3 ms, length +0.4 ms); false 0 -> PASS
+2026-10-19 23:24:53,850 - INFO -   PD_5_5 (laser_3, on 658 nA): 5 ms 10/10 (delay 1.7±0.4 ms, length -0.0 ms); 10 ms 10/10 (delay 1.5±0.4 ms, length +0.1 ms); 20 ms 10/10 (delay 1.5±0.4 ms, length +0.0 ms); 50 ms 10/10 (delay 1.5±0.3 ms, length +0.4 ms); false 0 -> PASS
+2026-10-19 23:24:53,856 - INFO -   PD_6_5 (laser_5, on 1551 nA): 5 ms 10/10 (delay 1.5±0.4 ms, length -0.4 ms); 10 ms 10/10 (delay 1.6±0.5 ms, length -0.0 ms); 20 ms 10/10 (delay 1.5±0.5 ms, length +0.0 ms); 50 ms 10/10 (delay 1.3±0.5 ms, length -0.2 ms); false 0 -> PASS
+2026-10-19 23:24:53,857 - INFO -   PD_2_0 (no laser routed here): largest signal 31 nA above dark
+2026-10-19 23:24:53,858 - INFO -   PD_4_0 (no laser routed here): largest signal 199 nA above dark
+2026-10-19 23:24:53,858 - INFO -   PD_6_0 (no laser routed here): largest signal 210 nA above dark
+2026-10-19 23:24:53,859 - INFO -   PD_1_5 (no laser routed here): largest signal 12 nA above dark
+2026-10-19 23:24:53,859 - INFO -   PD_3_5 (no laser routed here): largest signal 450 nA above dark
+2026-10-19 23:24:54,264 - INFO - Saved stream_check_20261019_232447 files in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 23:24:54,264 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 23:24:54,264 - INFO - Resetting board lasers (board number 0)
+2026-10-19 23:24:54,270 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 23:24:54,309 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

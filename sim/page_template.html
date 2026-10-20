@@ -1,0 +1,466 @@
+<title>Spike Express Lanes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an optical-bench instrument panel. Controls strip on top, the mesh as the
+   centerpiece with live traffic beside it, bus-latency trace below, explanation last. */
+:root{
+  --bg:#f4f6f8; --panel:#ffffff; --ink:#15181e; --ink2:#485062; --muted:#737b8c;
+  --line:#dde1e8; --line2:#eceff3;
+  --bus:#c2410c;          /* electronic AER bus traffic */
+  --opt:#4338ca;          /* optical traffic through the mesh */
+  --dark:#9aa1ae;         /* idle / dark ports */
+  --display:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --body:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1115; --panel:#171a20; --ink:#e8eaef; --ink2:#aeb5c3; --muted:#7f8796;
+  --line:#2a2f39; --line2:#20242c; --bus:#ea580c; --opt:#6d6ff0; --dark:#555c69; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a20; --ink:#e8eaef; --ink2:#aeb5c3; --muted:#7f8796;
+  --line:#2a2f39; --line2:#20242c; --bus:#ea580c; --opt:#6d6ff0; --dark:#555c69; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font-family:var(--display);font-size:clamp(26px,4vw,36px);font-weight:700;letter-spacing:-0.02em;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-size:18px;font-weight:600;margin:0 0 8px;text-wrap:balance}
+h3{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
+p{margin:0;max-width:68ch;color:var(--ink2)}
+.lede{font-size:16px}
+.mono,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.key{display:inline-flex;align-items:center;gap:6px;color:var(--ink2);font-size:13px}
+.sw{width:14px;height:3px;border-radius:2px;display:inline-block}
+.sw.bus{background:var(--bus)} .sw.opt{background:var(--opt)} .sw.dark{background:var(--dark)}
+
+/* controls */
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px 18px;align-items:end}
+.ctl{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ctl label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.ctl .val{font-family:var(--mono);font-size:13px;color:var(--ink);text-transform:none}
+select,input[type=range]{width:100%}
+select{font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{flex:1;font:inherit;font-size:13px;padding:6px 4px;border:0;background:var(--panel);color:var(--ink2);cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--opt);outline-offset:2px}
+input[type=range]{accent-color:var(--opt)}
+
+.play{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:7px 14px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.scrub{flex:1;min-width:160px}
+
+/* main grid */
+.main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.main{grid-template-columns:1fr}}
+.meshbox{overflow-x:auto}
+svg text{font-family:var(--mono);fill:var(--ink2)}
+.side{display:flex;flex-direction:column;gap:20px;min-width:0}
+.mat{display:grid;grid-template-columns:auto repeat(var(--n,6),minmax(0,1fr));gap:2px;font-family:var(--mono);font-size:11px}
+.mat div{display:flex;align-items:center;justify-content:center;min-height:30px;border-radius:3px;font-variant-numeric:tabular-nums}
+.mat .h{color:var(--muted);min-height:20px}
+.mat .c{color:var(--ink);background:var(--line2)}
+.mat .c.sel{box-shadow:inset 0 0 0 2px var(--opt);font-weight:600}
+.mat .c.hot{color:#fff}
+.cap{font-size:12px;color:var(--muted);margin-top:6px}
+
+.digit{display:flex;gap:14px;align-items:center}
+.digit canvas{width:88px;height:88px;image-rendering:pixelated;border-radius:6px;border:1px solid var(--line)}
+.digit .num{font-size:13px;color:var(--ink2)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-left:3px solid var(--line)}
+.stat.opt{border-color:var(--opt)} .stat.bus{border-color:var(--bus)}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.stat .s{font-size:12px;color:var(--ink2)}
+
+.chartwrap{position:relative}
+#chart{width:100%;height:220px;display:block;cursor:crosshair}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px;color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.12);white-space:nowrap}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+
+/* explainer */
+.explain{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.explain .panel{display:flex;flex-direction:column;gap:10px}
+table{border-collapse:collapse;font-size:13px;width:100%}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line2)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num{text-align:right}
+.tablewrap{overflow-x:auto}
+.callout{border-left:3px solid var(--opt);padding:8px 12px;background:var(--line2);border-radius:0 6px 6px 0}
+.callout p{color:var(--ink)}
+ul{margin:0;padding-left:18px;color:var(--ink2);max-width:68ch} li{margin:3px 0}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <h1>Spike Express Lanes</h1>
+    <p class="lede">A trained spiking network runs on <span data-fill="nword">several</span> neuromorphic "cores". Every spike that leaves a core normally waits on one shared electronic bus. Here the photonic chip's MZI mesh, used as a <span data-fill="nxn"></span> on waveguide rows <span data-fill="rows"></span>, is reconfigured every few milliseconds to carry the busiest core-to-core flows as light, and the bus handles the rest.</p>
+  </header>
+
+  <div class="callout"><p><strong>Is the mesh a router or fixed?</strong> A router, but a slow one. Its phase-shifter settings decide which input port's light reaches which output photodiode. Between reconfigurations it behaves like fixed optical wires. Here a computer re-picks the setting once per window (slider below), which is compatible with thermo-optic phase shifters.</p></div>
+
+  <section class="panel" aria-label="Simulation controls">
+    <div class="controls">
+      <div class="ctl"><label for="mapping">Neuron-to-core mapping</label>
+        <select id="mapping"><option value="layer">By layer (as described)</option><option value="random">Random placement</option></select></div>
+      <div class="ctl"><label>Mesh setting</label>
+        <div class="seg" id="strategy" role="group" aria-label="Mesh setting">
+          <button data-v="static" aria-pressed="false">Fixed</button>
+          <button data-v="adaptive" aria-pressed="true">Re-pick each window</button></div></div>
+      <div class="ctl"><label for="win">Reconfigure every <span class="val" id="winv"></span></label>
+        <input id="win" type="range" min="0" max="4" step="1" value="1"></div>
+      <div class="ctl"><label for="tau">Reconfiguration time <span class="val" id="tauv"></span></label>
+        <input id="tau" type="range" min="0" max="100" step="1" value="33"></div>
+      <div class="ctl"><label for="cap">Bus capacity <span class="val" id="capv"></span></label>
+        <input id="cap" type="range" min="20" max="200" step="5" value="75"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="play">
+      <button class="btn" id="playbtn">Pause</button>
+      <select id="speed" aria-label="Playback speed"><option value="0.05">0.05× real time</option><option value="0.1" selected>0.1× real time</option><option value="0.5">0.5× real time</option><option value="1">1× real time</option></select>
+      <input class="scrub" id="scrub" type="range" min="0" max="2999" value="0" aria-label="Time">
+      <span class="mono" id="tlabel" style="font-size:13px;color:var(--ink2)"></span>
+    </div>
+  </section>
+
+  <div class="main">
+    <section class="panel meshbox" aria-label="Mesh routing">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+        <h2>Mesh routing this window</h2>
+        <div class="legend"><span class="key"><span class="sw opt"></span>optical route</span><span class="key"><span class="sw dark"></span>dark port</span></div>
+      </div>
+      <svg id="mesh" viewBox="0 0 660 360" style="width:100%;min-width:520px;height:auto" role="img" aria-label="MZI mesh with active routes"></svg>
+      <p class="cap" id="routecap"></p>
+    </section>
+
+    <div class="side">
+      <section class="panel">
+        <h3>Core-to-core traffic, this window</h3>
+        <div class="mat" id="tmat"></div>
+        <p class="cap">Spike packets in the current window. Rows send, columns receive. Outlined cells ride the mesh; everything else goes on the bus.</p>
+      </section>
+      <section class="panel">
+        <h3>Mesh power matrix |U|²</h3>
+        <div class="mat" id="umat"></div>
+        <p class="cap">Fraction of each input's light reaching each output photodiode for the chip's current MZI states (BAR, CROSS, 50:50). Every row and column sums to 1. Dark inputs fill the leftover slots of a split.</p>
+      </section>
+      <section class="panel digit">
+        <canvas id="dig" width="34" height="34" aria-label="Current input digit events"></canvas>
+        <div><h3>Input now</h3><div class="num" id="diglab"></div></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel">
+    <h2>Bus congestion over the 6-second recording</h2>
+    <div class="stats" id="stats" style="margin:10px 0 14px"></div>
+    <div class="legend"><span class="key"><span class="sw bus"></span>Bus only</span><span class="key"><span class="sw opt"></span>Bus + mesh express lanes</span></div>
+    <div class="chartwrap"><canvas id="chart" aria-label="Queueing delay on the bus over time"></canvas><div class="tip" id="tip" hidden></div></div>
+    <p class="cap">Queueing delay a new spike packet would see on the shared bus. Click the chart to jump the playback there.</p>
+  </section>
+
+  <div class="explain">
+    <section class="panel">
+      <h2>How the neurons are split</h2>
+      <p>The network is 2312 input pixels → 128 hidden → 64 hidden → 10 outputs, trained on N-MNIST-style events. Each core hosts a group of neurons. A spike leaving a core becomes one packet per other core that holds a target neuron.</p>
+      <div class="tablewrap"><table id="coretab"></table></div>
+    </section>
+    <section class="panel">
+      <h2>The one rule the mesh follows</h2>
+      <p>Each output photodiode may listen to only one sending core per setting, because light from two senders adds up and the receiver can no longer tell who fired. Within that rule any pattern works:</p>
+      <ul>
+        <li>The chip uses each MZI only as BAR, CROSS or 50:50, so split branches never recombine and no phase calibration beyond these three states is needed.</li>
+        <li>One-to-one routes: every permutation of the <span data-fill="nword"></span> cores is reachable.</li>
+        <li>Multicast: equal splits built from 50:50 stages (<span data-fill="mcast"></span>).</li>
+        <li>Multicast to exactly 3 cores would need a 1/3 split, so <span data-fill="nreach"></span> of the <span data-fill="npat"></span> patterns are reachable. For this network's traffic the best reachable setting always carries as much as an unrestricted mesh would.</li>
+      </ul>
+      <p>Each window, the controller picks the reachable setting that carries the most traffic.</p>
+    </section>
+    <section class="panel">
+      <h2>Full test set (1000 digits, 300 s)</h2>
+      <p>Share of all spike packets carried by the mesh, with 0.1 ms reconfiguration time.</p>
+      <div class="tablewrap"><table id="fulltab"></table></div>
+      <p class="cap">"Best possible" knows each window's traffic in advance. "Re-pick" uses the previous window's traffic, as a real controller would.</p>
+    </section>
+    <section class="panel">
+      <h2>What this is and isn't</h2>
+      <ul>
+        <li>The SNN is real and trained here (test accuracy <span class="num" id="acc"></span>). <span id="datanote"></span></li>
+        <li>The bus is a single queue. Real AER networks have more structure, so treat delays as relative.</li>
+        <li>Input-layer spikes dominate the traffic. On a real chip, sensor input may arrive through its own port.</li>
+        <li>Partitioning matters more than adaptivity. Switch to random placement to see offload fall.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script type="application/json" id="simdata">__DATA__</script>
+<script>
+(() => {
+const D = JSON.parse(document.getElementById('simdata').textContent);
+const DT = D.dt_ms, BPS = D.bins_per_sample;
+const WINS = [2, 10, 20, 50, 100];
+const NB = D.mappings.layer.series[0].length;
+const NC = D.n, NN = NC * NC, FEAS = D.feasible;
+document.documentElement.style.setProperty('--n', NC);
+const ROWS = D.mesh.core_row, FILL = { nword: ['zero', 'one', 'two', 'three', 'four', 'five', 'six'][NC], nxn: `${NC}×${NC}`,
+  rows: `${ROWS[0]}–${ROWS[NC - 1]}`, nreach: FEAS.length.toLocaleString('en-US'), npat: D.mesh.n_patterns.toLocaleString('en-US'),
+  mcast: NC >= 5 ? 'to 2 cores as 1/2 each, to 4 cores as 1/4 each' : 'to 2 cores as 1/2 each' };
+document.querySelectorAll('[data-fill]').forEach(e => { e.textContent = FILL[e.dataset.fill]; });
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// state
+const S = { mapping: 'layer', strategy: 'adaptive', win: 10, tau: 0.1, cap: 75, t: 0, playing: !reduce, speed: 0.1 };
+
+// per-bin traffic matrices for each mapping
+const TR = {};
+for (const [k, m] of Object.entries(D.mappings)) {
+  const arr = new Float64Array(NB * NN);
+  m.pairs.forEach(([i, j], p) => { const s = m.series[p]; for (let b = 0; b < NB; b++) arr[b * NN + i * NC + j] = s[b]; });
+  TR[k] = arr;
+}
+const best = M => { let bi = 0, bv = -1; FEAS.forEach((f, k) => { let v = 0; for (let j = 0; j < NC; j++) if (f[j] >= 0) v += M[f[j] * NC + j]; if (v > bv) { bv = v; bi = k; } }); const a = FEAS[bi].slice(); a.idx = bi; return a; };
+const same = (a, b) => a.every((v, i) => v === b[i]);
+
+let R; // computed results
+function compute() {
+  const tr = TR[S.mapping], wb = Math.max(1, S.win / DT), nW = Math.ceil(NB / wb);
+  const tot = D.mappings[S.mapping].total_matrix.flat();
+  const staticA = best(tot);
+  const winSum = []; for (let w = 0; w < nW; w++) { const M = new Float64Array(NN); for (let b = w * wb; b < Math.min(NB, (w + 1) * wb); b++) for (let q = 0; q < NN; q++) M[q] += tr[b * NN + q]; winSum.push(M); }
+  const cfg = []; let reconf = 0;
+  for (let w = 0; w < nW; w++) {
+    const a = S.strategy === 'static' ? staticA : (w === 0 ? staticA : best(winSum[w - 1]));
+    const changed = w > 0 && !same(a, cfg[w - 1]); if (changed) reconf++;
+    cfg.push(a); cfg[w].changed = changed;
+  }
+  const lat0 = new Float64Array(NB), lat1 = new Float64Array(NB), off = new Float64Array(NB);
+  let q0 = 0, q1 = 0, allT = 0, allO = 0, peak0 = 0, peak1 = 0, s0 = 0, s1 = 0;
+  const C = S.cap * DT; // packets per bin
+  for (let b = 0; b < NB; b++) {
+    const w = Math.floor(b / wb), a = cfg[w];
+    let total = 0, carried = 0;
+    for (let q = 0; q < NN; q++) total += tr[b * NN + q];
+    for (let j = 0; j < NC; j++) if (a[j] >= 0) carried += tr[b * NN + a[j] * NC + j];
+    if (a.changed) { const t0 = (b - w * wb) * DT, frac = Math.min(1, Math.max(0, (t0 + DT - S.tau) / DT)); carried *= frac; }
+    q0 = Math.max(0, q0 + total - C); q1 = Math.max(0, q1 + total - carried - C);
+    lat0[b] = q0 / S.cap; lat1[b] = q1 / S.cap; off[b] = carried;
+    allT += total; allO += carried; peak0 = Math.max(peak0, lat0[b]); peak1 = Math.max(peak1, lat1[b]); s0 += lat0[b]; s1 += lat1[b];
+  }
+  R = { wb, nW, winSum, cfg, lat0, lat1, offFrac: allO / allT, mean0: s0 / NB, mean1: s1 / NB, peak0, peak1, reconf, rate: allT / (NB * DT) };
+}
+
+// ---------- mesh SVG ----------
+const svg = $('mesh'), NS = 'http://www.w3.org/2000/svg';
+const Y = i => 50 + i * 65, XL = 92, XM0 = 170, XM1 = 490, XR = 568;
+const MX = c => XM0 + 40 + c * 60;
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+function buildMesh() {
+  svg.innerHTML = '';
+  el('rect', { x: XM0, y: 18, width: XM1 - XM0, height: 324, rx: 8, fill: 'var(--line2)', stroke: 'var(--line)' });
+  el('text', { x: (XM0 + XM1) / 2, y: 354, 'text-anchor': 'middle', 'font-size': 11 }).textContent = `rows ${FILL.rows}: ${D.mesh.mzis.length} routing MZIs (B bar, X cross, ½ 50:50); edge MZIs at BAR`;
+  for (let i = 0; i < NC; i++) el('line', { x1: XM0, y1: Y(i), x2: XM1, y2: Y(i), stroke: 'var(--line)', 'stroke-width': 1 });
+  svg.mzi = D.mesh.mzis.map((m, k) => { const c = +m.split('_')[1] - 1, p = D.mesh.pair[k], x = MX(c), y0 = Y(p), y1 = Y(p + 1);
+    const r = el('rect', { x: x - 13, y: y0 - 4, width: 26, height: y1 - y0 + 8, rx: 5, fill: 'var(--panel)', stroke: 'var(--line)', 'stroke-width': 1.2 });
+    el('text', { x, y: y0 - 8, 'text-anchor': 'middle', 'font-size': 9, fill: 'var(--muted)' }).textContent = m;
+    const t = el('text', { x, y: (y0 + y1) / 2 + 4, 'text-anchor': 'middle', 'font-size': 12 }); return { r, t }; });
+  svg.routes = el('g', {}); svg.dots = el('g', {});
+  svg.src = []; svg.dst = [];
+  for (let i = 0; i < NC; i++) {
+    const g = el('g', {});
+    el('rect', { x: 20, y: Y(i) - 15, width: XL - 20, height: 30, rx: 6, fill: 'var(--panel)', stroke: 'var(--line)' }, g);
+    const t = el('text', { x: 30, y: Y(i) + 4, 'font-size': 12 }, g); t.textContent = 'C' + (i + 1) + ' tx';
+    el('text', { x: 30, y: Y(i) + 26, 'font-size': 9, fill: 'var(--muted)' }, g).textContent = 'row ' + D.mesh.core_row[i] + ' → ' + D.mesh.receiver_pd[i];
+    el('line', { x1: XL, y1: Y(i), x2: XM0, y2: Y(i), stroke: 'var(--line)', 'stroke-width': 2 }, g);
+    svg.src.push({ g, t, box: g.firstChild });
+    const h = el('g', {});
+    el('line', { x1: XM1, y1: Y(i), x2: XR, y2: Y(i), stroke: 'var(--line)', 'stroke-width': 2 }, h);
+    el('rect', { x: XR, y: Y(i) - 15, width: 72, height: 30, rx: 6, fill: 'var(--panel)', stroke: 'var(--line)' }, h);
+    const u = el('text', { x: XR + 10, y: Y(i) + 4, 'font-size': 12 }, h); u.textContent = 'PD→C' + (i + 1);
+    svg.dst.push({ g: h, t: u, box: h.children[1] });
+  }
+  el('text', { x: 20, y: 12, 'font-size': 11 }).textContent = 'laser + modulator';
+  el('text', { x: XR, y: 12, 'font-size': 11 }).textContent = 'on-chip photodiode';
+}
+let routes = [], lastCfgKey = '';
+function drawRoutes(a, M) {
+  const key = a.join(',') + S.mapping;
+  const tot = M.reduce((x, y) => x + y, 0) || 1;
+  if (key !== lastCfgKey) {
+    lastCfgKey = key; svg.routes.innerHTML = ''; routes = [];
+    const k = {}; a.forEach((s, j) => { if (s >= 0) k[s] = (k[s] || 0) + 1; });
+    a.forEach((s, j) => { if (s < 0) return;
+      const ys = Y(s), yd = Y(j);
+      const p = el('path', { d: `M${XL},${ys} L${XM0},${ys} C${(XM0 + XM1) / 2},${ys} ${(XM0 + XM1) / 2},${yd} ${XM1},${yd} L${XR},${yd}`, fill: 'none', stroke: 'var(--opt)', 'stroke-linecap': 'round' }, svg.routes);
+      if (k[s] > 1) { const t = el('text', { x: XM1 + 8, y: yd - 6, 'font-size': 10 }, svg.routes); t.textContent = '1/' + k[s]; }
+      routes.push({ s, j, p, len: p.getTotalLength() });
+    });
+    const srcs = new Set(a.filter(x => x >= 0));
+    svg.src.forEach((o, i) => { const on = srcs.has(i); o.box.setAttribute('stroke', on ? 'var(--opt)' : 'var(--line)'); o.t.style.fill = on ? 'var(--ink)' : 'var(--dark)'; o.t.textContent = 'C' + (i + 1) + (on ? ' tx' : ' dark'); });
+    svg.dst.forEach((o, j) => { const on = a[j] >= 0; o.box.setAttribute('stroke', on ? 'var(--opt)' : 'var(--line)'); o.t.style.fill = on ? 'var(--ink)' : 'var(--dark)'; o.t.textContent = on ? 'PD→C' + (j + 1) : 'C' + (j + 1) + ' silent'; });
+    const st = D.states[a.idx];
+    svg.mzi.forEach((o, k) => { const v = st[k]; o.t.textContent = v === 'B' ? 'B' : v === 'X' ? 'X' : '½'; o.r.setAttribute('stroke', v === 'B' ? 'var(--line)' : 'var(--opt)'); });
+    const desc = a.map((s, j) => s >= 0 ? `C${s + 1}→C${j + 1}` : null).filter(Boolean);
+    $('routecap').textContent = desc.length ? `Routes now: ${desc.join(', ')}. Dark inputs keep their spikes on the bus during this window.` : 'No routes in this window.';
+  }
+  routes.forEach(r => { const share = M[r.s * NC + r.j] / tot; r.p.setAttribute('stroke-width', 1.5 + 9 * Math.sqrt(share)); r.p.setAttribute('stroke-opacity', 0.35 + 0.65 * Math.min(1, share * 3)); });
+}
+// moving pulses
+let pulses = [];
+function spawnPulses(b) {
+  if (reduce) return;
+  const tr = TR[S.mapping];
+  routes.forEach(r => { const n = tr[b * NN + r.s * NC + r.j]; if (n > 0 && pulses.length < 220) { const c = Math.min(3, Math.ceil(Math.log2(1 + n))); for (let q = 0; q < c; q++) pulses.push({ r, u: -q * 0.05, e: el('circle', { r: 3.2, fill: 'var(--opt)' }, svg.dots) }); } });
+}
+function stepPulses(dtSec) {
+  pulses = pulses.filter(p => { p.u += dtSec * 1.6; if (p.u > 1) { p.e.remove(); return false; } if (p.u >= 0) { const pt = p.r.p.getPointAtLength(p.u * p.r.len); p.e.setAttribute('cx', pt.x); p.e.setAttribute('cy', pt.y); p.e.setAttribute('opacity', 1); } else p.e.setAttribute('opacity', 0); return true; });
+}
+
+// ---------- matrices ----------
+function drawMat(id, M, sel, fmt, rowLab) {
+  const box = $(id); let h = '<div class="h"></div>';
+  for (let j = 0; j < NC; j++) h += `<div class="h">C${j + 1}</div>`;
+  let mx = 0; for (const v of M) mx = Math.max(mx, v);
+  const opt = css('--opt'), panel = css('--line2');
+  for (let i = 0; i < NC; i++) {
+    h += `<div class="h">${rowLab(i)}</div>`;
+    for (let j = 0; j < NC; j++) {
+      const v = M[i * NC + j], f = mx ? v / mx : 0, pct = Math.round(Math.sqrt(f) * 85);
+      const hot = pct > 50 ? ' hot' : '';
+      h += `<div class="c${sel(i, j) ? ' sel' : ''}${hot}" style="background:color-mix(in oklab, ${opt} ${pct}%, ${panel})">${v ? fmt(v) : '·'}</div>`;
+    }
+  }
+  box.innerHTML = h;
+}
+function U2(a) {
+  // power matrix P[in, out] of the chip for this setting's MZI states
+  const st = D.states[a.idx], M = new Float64Array(NN);
+  for (let i = 0; i < NC; i++) M[i * NC + i] = 1;
+  D.mesh.pair.forEach((p, k) => { for (let i = 0; i < NC; i++) { const u = M[i * NC + p], v = M[i * NC + p + 1];
+    if (st[k] === 'X') { M[i * NC + p] = v; M[i * NC + p + 1] = u; } else if (st[k] === 'S') { M[i * NC + p] = M[i * NC + p + 1] = (u + v) / 2; } } });
+  return { M, srcs: new Set(a.filter(x => x >= 0)) };
+}
+const fmtFrac = v => ({ 4: '1', 3: '3/4', 2: '1/2', 1: '1/4' })[Math.round(v * 4)];
+const fmtCount = v => v >= 1000 ? (v / 1000).toFixed(1) + 'k' : String(Math.round(v));
+
+// ---------- digit ----------
+const dctx = $('dig').getContext('2d');
+function drawDigit(s) {
+  const img = D.images[s]; const id = dctx.createImageData(34, 34);
+  let mx = 1; img.forEach(r => r.forEach(v => mx = Math.max(mx, Math.abs(v))));
+  for (let y = 0; y < 34; y++) for (let x = 0; x < 34; x++) { const v = img[y][x] / mx, g = Math.round(128 + 127 * Math.max(-1, Math.min(1, v * 1.6))); const o = (y * 34 + x) * 4; id.data[o] = id.data[o + 1] = id.data[o + 2] = g; id.data[o + 3] = 255; }
+  dctx.putImageData(id, 0, 0);
+  const ok = D.pred[s] === D.labels[s];
+  $('diglab').innerHTML = `digit ${s + 1} of 20<br>label ${D.labels[s]} · SNN says ${D.pred[s]} ${ok ? '✓' : '✗'}<br>white = ON events, black = OFF`;
+}
+
+// ---------- chart ----------
+const cv = $('chart'), cx = cv.getContext('2d');
+function drawChart() {
+  const dpr = devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+  cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
+  const pl = 48, pr = 10, pt = 10, pb = 26, w = W - pl - pr, h = H - pt - pb;
+  let ymax = Math.max(R.peak0, R.peak1, 1); const nice = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]; ymax = nice.find(v => v >= ymax) || ymax;
+  const X = b => pl + (b / (NB - 1)) * w, Yv = v => pt + h - (v / ymax) * h;
+  cx.font = '11px ' + css('--mono'); cx.fillStyle = css('--muted'); cx.strokeStyle = css('--line2'); cx.lineWidth = 1;
+  for (let k = 0; k <= 4; k++) { const v = ymax * k / 4, y = Yv(v); cx.beginPath(); cx.moveTo(pl, y); cx.lineTo(pl + w, y); cx.stroke(); cx.textAlign = 'right'; cx.fillText(v >= 10 ? Math.round(v) : v.toFixed(1), pl - 6, y + 4); }
+  cx.save(); cx.translate(12, pt + h / 2); cx.rotate(-Math.PI / 2); cx.textAlign = 'center'; cx.fillText('delay (ms)', 0, 0); cx.restore();
+  cx.textAlign = 'center'; for (let s = 0; s <= 6; s++) { const b = Math.min(NB - 1, s * 1000 / DT); cx.fillText(s + ' s', X(b), H - 8); }
+  // sample boundaries
+  cx.strokeStyle = css('--line2'); for (let s = 1; s < 20; s++) { const x = X(s * BPS); cx.beginPath(); cx.moveTo(x, pt + h); cx.lineTo(x, pt + h - 5); cx.stroke(); }
+  const line = (arr, col) => { cx.strokeStyle = col; cx.lineWidth = 2; cx.lineJoin = 'round'; cx.beginPath(); for (let b = 0; b < NB; b++) { const x = X(b), y = Yv(arr[b]); b ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke(); };
+  line(R.lat0, css('--bus')); line(R.lat1, css('--opt'));
+  const x = X(S.t); cx.strokeStyle = css('--ink'); cx.lineWidth = 1; cx.setLineDash([3, 3]); cx.beginPath(); cx.moveTo(x, pt); cx.lineTo(x, pt + h); cx.stroke(); cx.setLineDash([]);
+  cv.geom = { pl, w, X, Yv };
+}
+cv.addEventListener('mousemove', e => {
+  const g = cv.geom; if (!g) return; const r = cv.getBoundingClientRect(); const b = Math.round(Math.max(0, Math.min(1, (e.clientX - r.left - g.pl) / g.w)) * (NB - 1));
+  const tip = $('tip'); tip.hidden = false;
+  tip.innerHTML = `t = ${(b * DT / 1000).toFixed(3)} s<br><span style="color:var(--bus)">■</span> bus only ${R.lat0[b].toFixed(2)} ms<br><span style="color:var(--opt)">■</span> bus + mesh ${R.lat1[b].toFixed(2)} ms`;
+  const tx = Math.min(e.clientX - r.left + 12, r.width - 170); tip.style.left = tx + 'px'; tip.style.top = '8px';
+});
+cv.addEventListener('mouseleave', () => $('tip').hidden = true);
+cv.addEventListener('click', e => { const g = cv.geom, r = cv.getBoundingClientRect(); setT(Math.round(Math.max(0, Math.min(1, (e.clientX - r.left - g.pl) / g.w)) * (NB - 1))); });
+
+// ---------- stats + tables ----------
+function drawStats() {
+  const f = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1) : v.toFixed(2);
+  $('stats').innerHTML = `
+  <div class="stat opt"><span class="k">Traffic carried by mesh</span><span class="v">${(R.offFrac * 100).toFixed(1)}%</span><span class="s">of ${Math.round(R.rate)} packets/ms on average</span></div>
+  <div class="stat bus"><span class="k">Mean bus delay, bus only</span><span class="v">${f(R.mean0)} ms</span><span class="s">peak ${f(R.peak0)} ms</span></div>
+  <div class="stat opt"><span class="k">Mean bus delay, with mesh</span><span class="v">${f(R.mean1)} ms</span><span class="s">peak ${f(R.peak1)} ms</span></div>
+  <div class="stat"><span class="k">Mesh reconfigurations</span><span class="v">${R.reconf}</span><span class="s">over 6 s, ${S.win} ms windows</span></div>`;
+}
+function tables() {
+  const m = D.mappings[S.mapping];
+  const names = D.core_names;
+  let h = '<thead><tr><th>Core</th><th>Holds</th><th class="num">Inputs</th><th class="num">H1</th><th class="num">H2</th><th class="num">Out</th></tr></thead><tbody>';
+  m.core_sizes.forEach((r, c) => { h += `<tr><td class="mono">C${c + 1}</td><td>${S.mapping === 'layer' ? names[c] : 'random mix'}</td>${r.map(v => `<td class="num">${v}</td>`).join('')}</tr>`; });
+  $('coretab').innerHTML = h + '</tbody>';
+  let t = '<thead><tr><th>Mapping</th><th class="num">Window</th><th class="num">Fixed</th><th class="num">Re-pick</th><th class="num">Best possible</th></tr></thead><tbody>';
+  for (const k of ['layer', 'random']) for (const wv of ['10', '20', '50', '100']) { const s = D.stats[k][wv]; t += `<tr><td>${k === 'layer' ? 'By layer' : 'Random'}</td><td class="num">${wv} ms</td><td class="num">${(s.static * 100).toFixed(1)}%</td><td class="num">${(s.adaptive * 100).toFixed(1)}%</td><td class="num">${(s.oracle * 100).toFixed(1)}%</td></tr>`; }
+  $('fulltab').innerHTML = t + '</tbody>';
+  $('acc').textContent = (D.acc * 100).toFixed(1) + '%';
+  $('datanote').textContent = D.real ? 'The input events are the real N-MNIST dataset (event-camera recordings of MNIST digits).' : 'The input events are emulated N-MNIST: MNIST digits moved in three saccades through a DVS model.';
+}
+
+// ---------- frame update ----------
+let lastSample = -1;
+function render() {
+  const b = S.t, w = Math.floor(b / R.wb), a = R.cfg[w], M = R.winSum[w];
+  drawRoutes(a, M);
+  drawMat('tmat', M, (i, j) => a[j] === i, fmtCount, i => 'C' + (i + 1));
+  const u = U2(a); drawMat('umat', u.M, (i, j) => a[j] === i, fmtFrac, i => u.srcs.has(i) ? 'C' + (i + 1) : 'dark');
+  const s = Math.floor(b / BPS); if (s !== lastSample) { drawDigit(s); lastSample = s; }
+  $('scrub').value = b; $('tlabel').textContent = `t = ${(b * DT / 1000).toFixed(2)} s · window ${w + 1}/${R.nW}`;
+  drawChart();
+}
+function setT(b) { S.t = b; render(); }
+
+// ---------- controls ----------
+function syncLabels() {
+  $('winv').textContent = S.win + ' ms';
+  $('tauv').textContent = S.tau < 1 ? (S.tau * 1000).toFixed(0) + ' µs' : S.tau.toFixed(1) + ' ms';
+  $('capv').textContent = S.cap + ' packets/ms';
+}
+function recompute() { syncLabels(); compute(); lastCfgKey = ''; pulses.forEach(p => p.e.remove()); pulses = []; drawStats(); tables(); render(); }
+$('mapping').onchange = e => { S.mapping = e.target.value; recompute(); };
+$('strategy').querySelectorAll('button').forEach(bt => bt.onclick = () => { S.strategy = bt.dataset.v; $('strategy').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === bt)); recompute(); });
+$('win').oninput = e => { S.win = WINS[+e.target.value]; recompute(); };
+$('tau').oninput = e => { S.tau = 0.01 * Math.pow(10, 3 * e.target.value / 100); recompute(); };
+$('cap').oninput = e => { S.cap = +e.target.value; recompute(); };
+$('scrub').oninput = e => setT(+e.target.value);
+$('speed').onchange = e => S.speed = +e.target.value;
+$('playbtn').onclick = () => { S.playing = !S.playing; $('playbtn').textContent = S.playing ? 'Pause' : 'Play'; };
+$('playbtn').textContent = S.playing ? 'Pause' : 'Play';
+
+let acc = 0, prev = performance.now();
+function loop(now) {
+  const dts = Math.min(0.1, (now - prev) / 1000); prev = now;
+  if (S.playing) {
+    acc += dts * 1000 * S.speed / DT;
+    let moved = false;
+    while (acc >= 1) { acc -= 1; S.t = (S.t + 1) % NB; spawnPulses(S.t); moved = true; }
+    if (moved) render();
+  }
+  stepPulses(dts);
+  requestAnimationFrame(loop);
+}
+addEventListener('resize', () => drawChart());
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { lastCfgKey = ''; render(); });
+buildMesh(); recompute(); requestAnimationFrame(loop);
+})();
+</script>

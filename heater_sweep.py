@@ -92,12 +92,26 @@ def fit_cos_v2(v: np.ndarray, y: np.ndarray, v_max: float) -> dict[str, float]:
                 r2=1 - residual / total if total > 0 else 0.0)
 
 
-def voltage_for_phase(fit: dict[str, float], target: float, v_max: float) -> float:
-    '''Lowest V in [0, v_max] where alpha*V^2 + theta0 = target (mod 2 pi), or nan.'''
+def voltage_for_phase(fit: dict[str, float], target: float, v_max: float) -> tuple[float, float]:
+    '''Lowest V in [0, v_max] where alpha*V^2 + theta0 = target (mod 2 pi). If no V in
+        range reaches it exactly, the V that comes closest.
+
+        Returns (voltage, remaining phase error in rad; 0 when reached exactly).
+    '''
     m = np.arange(-3, 20)
     v2 = (target + 2 * np.pi * m - fit["theta0"]) / fit["alpha"]
     v = np.sqrt(v2[(v2 >= 0) & (v2 <= v_max ** 2)])
-    return float(v.min()) if v.size else np.nan
+    if v.size:
+        return float(v.min()), 0.0
+    fine = np.linspace(0, v_max, 2001)
+    error = np.angle(np.exp(1j * (fit["alpha"] * fine ** 2 + fit["theta0"] - target)))
+    best = int(np.argmin(np.abs(error)))
+    return float(fine[best]), float(abs(error[best]))
+
+
+def fmt_v(v: float, error: float) -> str:
+    '''Voltage text; "~" marks a closest-reachable voltage, with how far off it is.'''
+    return f"{v:.2f} V" if error == 0 else f"~{v:.2f} V ({np.degrees(error):.0f} deg short)"
 
 
 def main() -> None:
@@ -159,10 +173,10 @@ def main() -> None:
                 fit = fit_cos_v2(volts, T[:, cross_pd], args.v_max)
                 swing = T[:, cross_pd].max() - T[:, cross_pd].min()
                 span = fit["alpha"] * args.v_max ** 2 / np.pi  # phase covered, in units of pi
-                v_cross = voltage_for_phase(fit, 0.0, args.v_max)       # cross detector at its maximum
-                v_bar = voltage_for_phase(fit, np.pi, args.v_max)       # ...at its minimum
-                v_50 = min(voltage_for_phase(fit, np.pi / 2, args.v_max),
-                           voltage_for_phase(fit, 3 * np.pi / 2, args.v_max))
+                v_cross, err_cross = voltage_for_phase(fit, 0.0, args.v_max)  # cross detector at its maximum
+                v_bar, err_bar = voltage_for_phase(fit, np.pi, args.v_max)    # ...at its minimum
+                v_50, err_50 = min(voltage_for_phase(fit, np.pi / 2, args.v_max),
+                                   voltage_for_phase(fit, 3 * np.pi / 2, args.v_max), key=lambda x: (x[1], x[0]))
                 hi, lo = fit["offset"] + fit["amp"], fit["offset"] - fit["amp"]
                 floor = 1e-3 * hi  # cap the extinction estimate at 30 dB
                 extinction_dB = 10 * np.log10(hi / max(lo, floor)) if hi > 0 else np.nan
@@ -171,11 +185,13 @@ def main() -> None:
                 calibration[mzi] = dict(heater=heater, laser=LASER_NETS[k], cross_pd=PD_NETS[cross_pd],
                                         bar_pd=PD_NETS[bar_pd], alpha_rad_per_V2=fit["alpha"], theta0_rad=fit["theta0"],
                                         V_pi=float(np.sqrt(np.pi / fit["alpha"])), V_cross=v_cross, V_bar=v_bar,
-                                        V_50=v_50, extinction_dB=extinction_dB, r2=fit["r2"], ok=bool(ok))
+                                        V_50=v_50, V_cross_error_rad=err_cross, V_bar_error_rad=err_bar,
+                                        V_50_error_rad=err_50, extinction_dB=extinction_dB, r2=fit["r2"], ok=bool(ok))
                 report(f"[6] {mzi} ({LASER_NETS[k]}; CROSS->{PD_NETS[cross_pd]}, BAR->{PD_NETS[bar_pd]}): "
                        f"swing {100 * swing:.0f}% of input, fit R2 {fit['r2']:.2f}, phase span {span:.1f} pi, "
-                       f"V_pi {calibration[mzi]['V_pi']:.2f} V; CROSS {v_cross:.2f} V, 50:50 {v_50:.2f} V, "
-                       f"BAR {v_bar:.2f} V; extinction {extinction_dB:.0f} dB; back at 0 V {100 * drift:+.1f}% "
+                       f"V_pi {calibration[mzi]['V_pi']:.2f} V; CROSS {fmt_v(v_cross, err_cross)}, "
+                       f"50:50 {fmt_v(v_50, err_50)}, BAR {fmt_v(v_bar, err_bar)}; extinction {extinction_dB:.0f} dB; "
+                       f"back at 0 V {100 * drift:+.1f}% "
                        f"-> {verdict(ok)}")
         except KeyboardInterrupt:
             report("Interrupted; saving what was measured.")

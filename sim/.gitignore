@@ -1,0 +1,5 @@
+# Simulation data: regenerate with run_all.sh (needs the full N-MNIST download)
+data/
+*.npz
+.venv/
+__pycache__/

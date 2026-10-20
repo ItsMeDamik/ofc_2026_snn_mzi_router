@@ -1,0 +1,48 @@
+{
+  "receivers": [
+    {
+      "receiver": "PD_1_5",
+      "expected": 0,
+      "hits": 0,
+      "missed": 0,
+      "false_crosstalk": 0,
+      "false_other": 0
+    },
+    {
+      "receiver": "PD_3_5",
+      "expected": 0,
+      "hits": 0,
+      "missed": 0,
+      "false_crosstalk": 0,
+      "false_other": 0
+    },
+    {
+      "receiver": "PD_4_5",
+      "expected": 14362,
+      "hits": 14353,
+      "missed": 9,
+      "false_crosstalk": 0,
+      "false_other": 1
+    },
+    {
+      "receiver": "PD_5_5",
+      "expected": 14362,
+      "hits": 14354,
+      "missed": 8,
+      "false_crosstalk": 0,
+      "false_other": 1
+    },
+    {
+      "receiver": "PD_6_5",
+      "expected": 11088,
+      "hits": 11083,
+      "missed": 5,
+      "false_crosstalk": 5,
+      "false_other": 0
+    }
+  ],
+  "packets_total": 1045127,
+  "packets_planned": 609756,
+  "packets_delivered": 609607,
+  "drive_errors": 26
+}

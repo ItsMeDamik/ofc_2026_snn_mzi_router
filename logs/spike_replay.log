@@ -31,3 +31,36 @@
 2026-10-19 23:36:46,158 - INFO - Resetting board lasers (board number 0)
 2026-10-19 23:36:46,165 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-19 23:36:46,196 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:53:40,270 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 23:53:40,271 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 23:53:41,078 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 23:53:41,078 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 23:53:41,079 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 23:53:41,197 - INFO - Searching for connected DAQ boards...
+2026-10-19 23:53:41,214 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 23:53:41,316 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 23:53:41,318 - INFO - Received UID: PICO-001
+2026-10-19 23:53:41,318 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 23:53:41,319 - INFO - Device ID = PICO-001
+2026-10-19 23:53:41,319 - INFO - Initializing board definitions for PICO-001
+2026-10-19 23:53:41,319 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 23:53:41,324 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 23:53:41,325 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 23:53:42,328 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 23:53:42,329 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 23:53:42,715 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:53:44,936 - INFO - spike_replay 20261019_235342: digits [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99] (15000 SNN steps of 2 ms), slot 15 ms, pulse 6 ms, 52431 commands, 226.0 s
+2026-10-19 23:57:31,375 - INFO -   command timing: median 0.89 ms late, max 69.6 ms, 5421 of 52431 more than 2 ms late
+2026-10-19 23:57:35,738 - INFO -   C1 receiver PD_1_5 (no optical traffic to it): largest signal 462 nA
+2026-10-19 23:57:39,990 - INFO -   C2 receiver PD_3_5 (no optical traffic to it): largest signal 489 nA
+2026-10-19 23:57:44,284 - INFO -   C3 receiver PD_4_5 (from C1 616 nA, from C2 623 nA): 14353/14362 spikes, 9 missed, false 0 while another core fired + 1 otherwise -> FAIL
+2026-10-19 23:57:48,583 - INFO -   C4 receiver PD_5_5 (from C1 678 nA, from C2 687 nA): 14354/14362 spikes, 8 missed, false 0 while another core fired + 1 otherwise -> FAIL
+2026-10-19 23:57:52,424 - INFO -   C5 receiver PD_6_5 (from C3 1386 nA, from C4 1569 nA): 11083/11088 spikes, 5 missed, false 5 while another core fired + 0 otherwise -> FAIL
+2026-10-19 23:58:04,859 - INFO -   laser drive check: 26 slots where a laser input disagreed with the command
+2026-10-19 23:58:04,969 - INFO -   spike packets: 1045127 in total, 609756 planned by light (58.3%), 609607 delivered (99.98% of planned)
+2026-10-19 23:58:04,969 - INFO -   overall: 39812 optical spike slots, 29 errors -> FAIL
+2026-10-19 23:58:05,542 - INFO - Saved spike_replay_20261019_235342 files in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 23:58:05,542 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 23:58:05,542 - INFO - Resetting board lasers (board number 0)
+2026-10-19 23:58:05,549 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 23:58:05,585 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

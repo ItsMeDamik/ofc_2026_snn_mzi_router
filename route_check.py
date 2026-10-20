@@ -7,7 +7,8 @@
       2. Dark reading with all lasers off (heaters on: they can shift detector offsets).
       3. Each core's laser alone: every detector divided by that laser's input detector
          gives its transmission row T[sender, detector].
-      4. The setting's active lasers together: checks that their light simply adds.
+      4. The setting's active lasers together: checks that their light simply adds (after
+         scaling for any change in each laser's power, which is reported separately).
 
     Reported per setting:
       - signal-to-crosstalk at each receiver: light from its intended sender vs from the
@@ -169,13 +170,20 @@ def main() -> None:
                     lines.append(part)
                     res[names[s]] = {"on_target": share, "T_receivers": dict(zip([names[x] for x in dests], got.tolist()))}
                 row1 = max(T[k, PD_NETS.index(p)] / T[k, outs].sum() for k in range(len(rows)) for p in ROW1_PDS)
-                expected = I[list(active)].sum(axis=0)
+                # lasers together: scale each single-laser row to that laser's input power while
+                # together (laser powers shift when both are on), then the light should simply add
+                p_in = [PD_NETS.index(inputs[a]) for a in active]
+                expected = sum(T[a] * I_all[i] for a, i in zip(active, p_in))
                 sum_err = max(abs(I_all[r] / expected[r] - 1) for r in rx if expected[r] > cs.LIT_NA)
+                power_shift = {names[a]: I_all[i] / I[a, i] - 1 for a, i in zip(active, p_in)}
                 ok = min(sxr.values()) >= SXR_TARGET_DB and sum_err <= SUM_TOL
                 report(f"[{name}]   {' | '.join(lines)}")
                 report(f"[{name}]   signal/crosstalk: " + ", ".join(f"{k} {'>=' if bound[k] else ''}{v:.1f} dB" for k, v in sxr.items()) +
                        f"; row-1 leak up to {100 * row1:.1f}%; lasers together vs sum {100 * sum_err:.1f}% -> {verdict(ok)}")
-                res.update(sxr_dB=sxr, sxr_is_lower_bound=bound, row1_leak=row1, sum_error=sum_err, ok=bool(ok))
+                report(f"[{name}]   laser power with both on vs alone: " +
+                       ", ".join(f"{k} {100 * v:+.0f}%" for k, v in power_shift.items()))
+                res.update(sxr_dB=sxr, sxr_is_lower_bound=bound, row1_leak=row1, sum_error=sum_err,
+                           laser_power_shift=power_shift, ok=bool(ok))
                 results[name] = res
                 data[f"{name}_I_nA"], data[f"{name}_I_all_nA"], data[f"{name}_dark"] = I, I_all, dark
         except KeyboardInterrupt:

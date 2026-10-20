@@ -63,6 +63,7 @@ with torch.no_grad():
         S3.append(s3.numpy().astype(np.uint8))
 acc = correct / len(Xte)
 print(f"test accuracy {acc:.3f}")
+np.savez_compressed("snn_weights.npz", **{k: v.numpy() for k, v in net.state_dict().items()}, beta=0.9, threshold=1.0)
 np.savez_compressed("spikes_test.npz", inp=Xte, h1=np.concatenate(S1),
                     h2=np.concatenate(S2), out=np.concatenate(S3), labels=yte,
                     acc=acc, dt_ms=int(d["dt_ms"]),

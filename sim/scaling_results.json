@@ -1,0 +1,334 @@
+{
+ "fc": {
+  "5": {
+   "cores": 5,
+   "accuracy": 0.909,
+   "offload_dynamic": 0.5830433945070123,
+   "offload_fixed": 0.5267128310309829,
+   "mean_load_pkts_per_ms": 33.13763427734375,
+   "peak_over_mean": 4.466220855712891,
+   "receiver_switch_rate_per_window": 0.6817272424141381,
+   "max_fanout": 2,
+   "budget": {
+    "split_loss_dB": 3.0,
+    "margin_left_dB_at_0.1dB_per_column": 21.9,
+    "margin_left_dB_at_0.3dB_per_column": 21.9,
+    "margin_left_dB_at_0.5dB_per_column": 21.9,
+    "sxr_dB_est": 16.8
+   },
+   "delay_bus_only_1.0x": [
+    943.7921377268032,
+    1982.4575128516356
+   ],
+   "delay_with_lanes_1.0x": [
+    0.5165222924018791,
+    11.107859327773344
+   ],
+   "delay_bus_only_1.5x": [
+    5.629299292088174,
+    45.08530136341226
+   ],
+   "delay_with_lanes_1.5x": [
+    0.01570112668487456,
+    0.2273265846513342
+   ],
+   "delay_bus_only_2.0x": [
+    1.1938307185557788,
+    18.08597560998069
+   ],
+   "delay_with_lanes_2.0x": [
+    0.00012398927096399088,
+    0.0
+   ]
+  },
+  "9": {
+   "cores": 9,
+   "accuracy": 0.909,
+   "offload_dynamic": 0.377356527648523,
+   "offload_fixed": 0.27296962824447873,
+   "mean_load_pkts_per_ms": 61.142333984375,
+   "peak_over_mean": 4.522234916687012,
+   "receiver_switch_rate_per_window": 1.6770590196732245,
+   "max_fanout": 4,
+   "budget": {
+    "split_loss_dB": 6.0,
+    "margin_left_dB_at_0.1dB_per_column": 18.5,
+    "margin_left_dB_at_0.3dB_per_column": 17.7,
+    "margin_left_dB_at_0.5dB_per_column": 16.9,
+    "sxr_dB_est": 14.2
+   },
+   "delay_bus_only_1.0x": [
+    963.0641608069564,
+    2022.8378615151792
+   ],
+   "delay_with_lanes_1.0x": [
+    4.590570740054424,
+    40.29887665914899
+   ],
+   "delay_bus_only_1.5x": [
+    5.707509517465109,
+    46.50898409060344
+   ],
+   "delay_with_lanes_1.5x": [
+    0.48894719342418047,
+    11.066530390550817
+   ],
+   "delay_bus_only_2.0x": [
+    1.2093027853755471,
+    18.594826205183573
+   ],
+   "delay_with_lanes_2.0x": [
+    0.042268028256444184,
+    1.3826671588128647
+   ]
+  },
+  "17": {
+   "cores": 17,
+   "accuracy": 0.909,
+   "offload_dynamic": 0.2924822896236722,
+   "offload_fixed": 0.208772697060678,
+   "mean_load_pkts_per_ms": 117.1517333984375,
+   "peak_over_mean": 4.5624589920043945,
+   "receiver_switch_rate_per_window": 3.8114371457152383,
+   "max_fanout": 8,
+   "budget": {
+    "split_loss_dB": 9.0,
+    "margin_left_dB_at_0.1dB_per_column": 14.7,
+    "margin_left_dB_at_0.3dB_per_column": 12.3,
+    "margin_left_dB_at_0.5dB_per_column": 9.9,
+    "sxr_dB_est": 11.5
+   },
+   "delay_bus_only_1.0x": [
+    973.9818574349603,
+    2045.8600882144237
+   ],
+   "delay_with_lanes_1.0x": [
+    10.51338286756889,
+    77.68306284984635
+   ],
+   "delay_bus_only_1.5x": [
+    5.762142560964498,
+    47.33043041956208
+   ],
+   "delay_with_lanes_1.5x": [
+    1.0438035324315709,
+    17.690325758278302
+   ],
+   "delay_bus_only_2.0x": [
+    1.2199956752772807,
+    18.942351696924163
+   ],
+   "delay_with_lanes_2.0x": [
+    0.14142647794321384,
+    4.711235691189457
+   ]
+  },
+  "33": {
+   "cores": 33,
+   "accuracy": 0.909,
+   "offload_dynamic": 0.2649198603010056,
+   "offload_fixed": 0.19735834275378045,
+   "mean_load_pkts_per_ms": 229.1705322265625,
+   "peak_over_mean": 4.583922863006592,
+   "receiver_switch_rate_per_window": 7.402634211403801,
+   "max_fanout": 16,
+   "budget": {
+    "split_loss_dB": 12.0,
+    "margin_left_dB_at_0.1dB_per_column": 10.1,
+    "margin_left_dB_at_0.3dB_per_column": 4.5,
+    "margin_left_dB_at_0.5dB_per_column": -1.1,
+    "sxr_dB_est": 8.6
+   },
+   "delay_bus_only_1.0x": [
+    979.3875004308343,
+    2057.70842396657
+   ],
+   "delay_with_lanes_1.0x": [
+    16.348970973533717,
+    117.73606902485331
+   ],
+   "delay_bus_only_1.5x": [
+    5.795572057372375,
+    47.79338575787516
+   ],
+   "delay_with_lanes_1.5x": [
+    1.4065965667900517,
+    21.706009814287572
+   ],
+   "delay_bus_only_2.0x": [
+    1.2265297311213677,
+    19.138805762331774
+   ],
+   "delay_with_lanes_2.0x": [
+    0.231198845536996,
+    6.985429378993295
+   ]
+  }
+ },
+ "local": {
+  "5": {
+   "cores": 5,
+   "accuracy": 0.882,
+   "offload_dynamic": 0.8075278093017193,
+   "offload_fixed": 0.79854104298741,
+   "mean_load_pkts_per_ms": 18.8787841796875,
+   "peak_over_mean": 4.502408504486084,
+   "receiver_switch_rate_per_window": 0.23107702567522506,
+   "max_fanout": 2,
+   "budget": {
+    "split_loss_dB": 3.0,
+    "margin_left_dB_at_0.1dB_per_column": 21.9,
+    "margin_left_dB_at_0.3dB_per_column": 21.9,
+    "margin_left_dB_at_0.5dB_per_column": 21.9,
+    "sxr_dB_est": 16.8
+   },
+   "delay_bus_only_1.0x": [
+    1024.5697735346416,
+    2082.712572888041
+   ],
+   "delay_with_lanes_1.0x": [
+    0.0005166782111797226,
+    0.0
+   ],
+   "delay_bus_only_1.5x": [
+    5.895375632501016,
+    47.54457262940087
+   ],
+   "delay_with_lanes_1.5x": [
+    0.0,
+    0.0
+   ],
+   "delay_bus_only_2.0x": [
+    1.2357762322588988,
+    18.943934176069302
+   ],
+   "delay_with_lanes_2.0x": [
+    0.0,
+    0.0
+   ]
+  },
+  "9": {
+   "cores": 9,
+   "accuracy": 0.882,
+   "offload_dynamic": 0.629905976761188,
+   "offload_fixed": 0.6180438060746556,
+   "mean_load_pkts_per_ms": 23.553049087524414,
+   "peak_over_mean": 4.436792850494385,
+   "receiver_switch_rate_per_window": 0.869623207735912,
+   "max_fanout": 4,
+   "budget": {
+    "split_loss_dB": 6.0,
+    "margin_left_dB_at_0.1dB_per_column": 18.5,
+    "margin_left_dB_at_0.3dB_per_column": 17.7,
+    "margin_left_dB_at_0.5dB_per_column": 16.9,
+    "sxr_dB_est": 14.2
+   },
+   "delay_bus_only_1.0x": [
+    849.9375201766098,
+    1796.49585418114
+   ],
+   "delay_with_lanes_1.0x": [
+    0.14514708361497838,
+    4.108804100649294
+   ],
+   "delay_bus_only_1.5x": [
+    5.0078276547467,
+    41.26408996617802
+   ],
+   "delay_with_lanes_1.5x": [
+    0.0014973130624667708,
+    0.0
+   ],
+   "delay_bus_only_2.0x": [
+    1.0987314121031397,
+    17.49510727426898
+   ],
+   "delay_with_lanes_2.0x": [
+    0.0,
+    0.0
+   ]
+  },
+  "17": {
+   "cores": 17,
+   "accuracy": 0.882,
+   "offload_dynamic": 0.5226816285956727,
+   "offload_fixed": 0.49790988112773066,
+   "mean_load_pkts_per_ms": 28.92180061340332,
+   "peak_over_mean": 4.71962308883667,
+   "receiver_switch_rate_per_window": 2.4711570523507835,
+   "max_fanout": 6,
+   "budget": {
+    "split_loss_dB": 7.8,
+    "margin_left_dB_at_0.1dB_per_column": 15.9,
+    "margin_left_dB_at_0.3dB_per_column": 13.5,
+    "margin_left_dB_at_0.5dB_per_column": 11.1,
+    "sxr_dB_est": 11.5
+   },
+   "delay_bus_only_1.0x": [
+    845.0523567844921,
+    1852.5334951023026
+   ],
+   "delay_with_lanes_1.0x": [
+    1.320431115829065,
+    21.153224505820035
+   ],
+   "delay_bus_only_1.5x": [
+    5.643408415587933,
+    47.087042343755954
+   ],
+   "delay_with_lanes_1.5x": [
+    0.11376340621518927,
+    3.7756698170984744
+   ],
+   "delay_bus_only_2.0x": [
+    1.3364636808318935,
+    20.632399981719065
+   ],
+   "delay_with_lanes_2.0x": [
+    0.005564804224588937,
+    0.0
+   ]
+  },
+  "33": {
+   "cores": 33,
+   "accuracy": 0.882,
+   "offload_dynamic": 0.48050733406140844,
+   "offload_fixed": 0.45192925601529227,
+   "mean_load_pkts_per_ms": 32.62656784057617,
+   "peak_over_mean": 4.781379222869873,
+   "receiver_switch_rate_per_window": 4.076358786262087,
+   "max_fanout": 8,
+   "budget": {
+    "split_loss_dB": 9.0,
+    "margin_left_dB_at_0.1dB_per_column": 13.1,
+    "margin_left_dB_at_0.3dB_per_column": 7.5,
+    "margin_left_dB_at_0.5dB_per_column": 1.9,
+    "sxr_dB_est": 8.6
+   },
+   "delay_bus_only_1.0x": [
+    993.2362452774371,
+    2116.151255546245
+   ],
+   "delay_with_lanes_1.0x": [
+    2.1510504180337047,
+    28.389940915663367
+   ],
+   "delay_bus_only_1.5x": [
+    6.833929648971946,
+    56.88800717857443
+   ],
+   "delay_with_lanes_1.5x": [
+    0.21658833388363663,
+    6.398589824704197
+   ],
+   "delay_bus_only_2.0x": [
+    1.47737575756442,
+    21.921326003386632
+   ],
+   "delay_with_lanes_2.0x": [
+    0.014680583010312692,
+    0.22298189675522403
+   ]
+  }
+ }
+}

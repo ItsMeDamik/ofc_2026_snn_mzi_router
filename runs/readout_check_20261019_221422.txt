@@ -1,0 +1,8 @@
+Detector readout mode: slow
+readout_check 20261019_221422: each laser alone at 10.0 V; carry-over onto the next-scanned channel
+  laser_1: PD_1_0 2106 nA -> next PD_2_0: group_vin 33.6%, read_pds (slow) -0.0% -> PASS
+  laser_2: PD_2_0 2317 nA -> next PD_3_0: group_vin 17.8%, read_pds (slow) -0.0% -> PASS
+  laser_3: PD_3_0 2153 nA -> next PD_4_0: group_vin 14.2%, read_pds (slow) -0.1% -> PASS
+  laser_4: PD_4_0 2493 nA -> next PD_5_0: group_vin 33.7%, read_pds (slow) -0.1% -> PASS
+  laser_5: PD_5_0 2822 nA -> next PD_6_0: group_vin 33.1%, read_pds (slow) -0.0% -> PASS
+  laser_6: PD_6_0 3044 nA -> next PD_1_5: group_vin 65.5%, read_pds (slow) 31.7% -> FAIL

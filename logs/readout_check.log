@@ -1,0 +1,69 @@
+2026-10-19 22:06:01,193 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 22:06:01,194 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 22:06:01,332 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 22:06:01,332 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 22:06:01,332 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 22:06:01,446 - INFO - Searching for connected DAQ boards...
+2026-10-19 22:06:01,462 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 22:06:01,564 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 22:06:01,566 - INFO - Received UID: PICO-001
+2026-10-19 22:06:01,567 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 22:06:01,567 - INFO - Device ID = PICO-001
+2026-10-19 22:06:01,568 - INFO - Initializing board definitions for PICO-001
+2026-10-19 22:06:01,568 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 22:06:01,573 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 22:06:01,573 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 22:06:02,578 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 22:06:02,579 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 22:06:02,590 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:06:09,183 - INFO - WARNING: double-read NI task unavailable (Specified channel cannot be added to the task, because a channel with the same name is already in the task.
+Channel Name: Dev1/ai0
+
+Task Name: _unnamedTask<1>
+
+Status Code: -200489); falling back to pydaq group_vin, which lets each channel pick up part of the previous one
+2026-10-19 22:06:09,525 - INFO - readout_check 20261019_220602: each laser alone at 10.0 V; carry-over onto the next-scanned channel
+2026-10-19 22:06:14,204 - INFO -   laser_1: PD_1_0 1415 nA -> next PD_2_0: group_vin 33.6%, read_pds 33.6% -> FAIL
+2026-10-19 22:06:18,909 - INFO -   laser_2: PD_2_0 1551 nA -> next PD_3_0: group_vin 17.8%, read_pds 17.8% -> FAIL
+2026-10-19 22:06:23,683 - INFO -   laser_3: PD_3_0 1458 nA -> next PD_4_0: group_vin 14.1%, read_pds 14.1% -> FAIL
+2026-10-19 22:06:28,443 - INFO -   laser_4: PD_4_0 1706 nA -> next PD_5_0: group_vin 33.7%, read_pds 33.7% -> FAIL
+2026-10-19 22:06:33,138 - INFO -   laser_5: PD_5_0 1918 nA -> next PD_6_0: group_vin 33.1%, read_pds 33.1% -> FAIL
+2026-10-19 22:06:37,861 - INFO -   laser_6: PD_6_0 2097 nA -> next PD_1_5: group_vin 65.1%, read_pds 65.0% -> FAIL
+2026-10-19 22:06:37,873 - INFO - Saved readout_check_20261019_220602.txt
+2026-10-19 22:06:37,873 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 22:06:37,874 - INFO - Resetting board lasers (board number 0)
+2026-10-19 22:06:37,880 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 22:06:37,932 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:06:38,080 - INFO - NI DAQ task closed during cleanup.
+2026-10-19 22:14:20,969 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 22:14:20,970 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 22:14:21,109 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 22:14:21,109 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 22:14:21,109 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 22:14:21,214 - INFO - Searching for connected DAQ boards...
+2026-10-19 22:14:21,229 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 22:14:21,332 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 22:14:21,332 - INFO - Received UID: PICO-001
+2026-10-19 22:14:21,332 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 22:14:21,332 - INFO - Device ID = PICO-001
+2026-10-19 22:14:21,333 - INFO - Initializing board definitions for PICO-001
+2026-10-19 22:14:21,333 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 22:14:21,335 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 22:14:21,335 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 22:14:22,336 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 22:14:22,336 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 22:14:22,344 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:14:27,511 - INFO - Detector readout mode: slow
+2026-10-19 22:14:28,359 - INFO - readout_check 20261019_221422: each laser alone at 10.0 V; carry-over onto the next-scanned channel
+2026-10-19 22:14:33,246 - INFO -   laser_1: PD_1_0 2106 nA -> next PD_2_0: group_vin 33.6%, read_pds (slow) -0.0% -> PASS
+2026-10-19 22:14:38,112 - INFO -   laser_2: PD_2_0 2317 nA -> next PD_3_0: group_vin 17.8%, read_pds (slow) -0.0% -> PASS
+2026-10-19 22:14:43,042 - INFO -   laser_3: PD_3_0 2153 nA -> next PD_4_0: group_vin 14.2%, read_pds (slow) -0.1% -> PASS
+2026-10-19 22:14:47,895 - INFO -   laser_4: PD_4_0 2493 nA -> next PD_5_0: group_vin 33.7%, read_pds (slow) -0.1% -> PASS
+2026-10-19 22:14:52,757 - INFO -   laser_5: PD_5_0 2822 nA -> next PD_6_0: group_vin 33.1%, read_pds (slow) -0.0% -> PASS
+2026-10-19 22:14:57,610 - INFO -   laser_6: PD_6_0 3044 nA -> next PD_1_5: group_vin 65.5%, read_pds (slow) 31.7% -> FAIL
+2026-10-19 22:14:57,626 - INFO - Saved readout_check_20261019_221422.txt
+2026-10-19 22:14:57,626 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 22:14:57,626 - INFO - Resetting board lasers (board number 0)
+2026-10-19 22:14:57,643 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 22:14:57,696 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:14:57,747 - INFO - NI DAQ task closed during cleanup.

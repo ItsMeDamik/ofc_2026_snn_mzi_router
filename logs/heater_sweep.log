@@ -115,3 +115,41 @@
 2026-10-19 20:55:44,846 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-19 20:55:44,878 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
 2026-10-19 20:55:44,944 - INFO - NI DAQ task closed during cleanup.
+2026-10-19 22:17:05,951 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 22:17:05,973 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 22:17:06,115 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 22:17:06,115 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 22:17:06,115 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 22:17:06,235 - INFO - Searching for connected DAQ boards...
+2026-10-19 22:17:06,250 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 22:17:06,352 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 22:17:06,352 - INFO - Received UID: PICO-001
+2026-10-19 22:17:06,352 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 22:17:06,352 - INFO - Device ID = PICO-001
+2026-10-19 22:17:06,353 - INFO - Initializing board definitions for PICO-001
+2026-10-19 22:17:06,353 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 22:17:06,355 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 22:17:06,356 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 22:17:07,359 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 22:17:07,360 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 22:17:07,378 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:17:07,379 - INFO - heater_sweep 20261019_221707, heaters 0-4.2 V in 41 steps, laser 10.0 V, settle 50 ms per step
+2026-10-19 22:17:12,538 - INFO - Detector readout mode: slow
+2026-10-19 22:17:42,923 - INFO - [6] 1_1 (laser_1; CROSS->PD_6_5, BAR->PD_4_5): swing 46% of input, fit R2 1.00, phase span 1.1 pi, V_pi 3.99 V; CROSS ~0.00 V (37 deg short), 50:50 2.16 V, BAR 3.55 V; extinction 30 dB; back at 0 V +0.0% -> PASS
+2026-10-19 22:17:48,339 - INFO - [6] 2_2 (laser_1; CROSS->PD_6_5, BAR->PD_2_5): swing 48% of input, fit R2 1.00, phase span 1.3 pi, V_pi 3.62 V; CROSS 0.82 V, 50:50 2.69 V, BAR 3.72 V; extinction 30 dB; back at 0 V +0.4% -> PASS
+2026-10-19 22:17:53,776 - INFO - [6] 3_3 (laser_1; CROSS->PD_6_5, BAR->PD_1_5): swing 46% of input, fit R2 1.00, phase span 1.3 pi, V_pi 3.68 V; CROSS ~0.00 V (7 deg short), 50:50 2.50 V, BAR 3.61 V; extinction 30 dB; back at 0 V +0.2% -> PASS
+2026-10-19 22:17:59,203 - INFO - [6] 4_4 (laser_1; CROSS->PD_6_5, BAR->PD_3_5): swing 46% of input, fit R2 1.00, phase span 1.3 pi, V_pi 3.71 V; CROSS ~0.00 V (20 deg short), 50:50 2.31 V, BAR 3.49 V; extinction 30 dB; back at 0 V -0.1% -> PASS
+2026-10-19 22:18:04,593 - INFO - [6] 5_5 (laser_1; CROSS->PD_6_5, BAR->PD_5_5): swing 46% of input, fit R2 1.00, phase span 1.2 pi, V_pi 3.80 V; CROSS ~0.00 V (43 deg short), 50:50 1.95 V, BAR 3.32 V; extinction 30 dB; back at 0 V +0.1% -> PASS
+2026-10-19 22:18:30,066 - INFO - [6] 1_3 (laser_2; CROSS->PD_4_5, BAR->PD_2_5): swing 32% of input, fit R2 1.00, phase span 1.2 pi, V_pi 3.83 V; CROSS ~0.00 V (60 deg short), 50:50 1.56 V, BAR 3.12 V; extinction 22 dB; back at 0 V -0.4% -> PASS
+2026-10-19 22:18:35,505 - INFO - [6] 2_4 (laser_2; CROSS->PD_4_5, BAR->PD_1_5): swing 32% of input, fit R2 1.00, phase span 1.3 pi, V_pi 3.71 V; CROSS ~0.00 V (18 deg short), 50:50 2.34 V, BAR 3.52 V; extinction 30 dB; back at 0 V +0.0% -> PASS
+2026-10-19 22:18:40,775 - INFO - [6] 3_5 (laser_2; CROSS->PD_4_5, BAR->PD_3_5): swing 48% of input, fit R2 1.00, phase span 1.4 pi, V_pi 3.52 V; CROSS 2.13 V, 50:50 3.27 V, BAR 4.11 V; extinction 18 dB; back at 0 V -0.3% -> PASS
+2026-10-19 22:19:06,257 - INFO - [6] 3_1 (laser_3; CROSS->PD_5_5, BAR->PD_2_5): swing 39% of input, fit R2 1.00, phase span 1.4 pi, V_pi 3.55 V; CROSS 2.20 V, 50:50 3.33 V, BAR 4.17 V; extinction 16 dB; back at 0 V -0.6% -> PASS
+2026-10-19 22:19:11,705 - INFO - [6] 4_2 (laser_3; CROSS->PD_5_5, BAR->PD_1_5): swing 37% of input, fit R2 1.00, phase span 1.5 pi, V_pi 3.48 V; CROSS 2.13 V, 50:50 3.25 V, BAR 4.07 V; extinction 18 dB; back at 0 V -3.8% -> PASS
+2026-10-19 22:19:17,166 - INFO - [6] 5_3 (laser_3; CROSS->PD_5_5, BAR->PD_3_5): swing 26% of input, fit R2 1.00, phase span 1.3 pi, V_pi 3.65 V; CROSS ~0.00 V (4 deg short), 50:50 2.52 V, BAR 3.61 V; extinction 30 dB; back at 0 V +1.0% -> PASS
+2026-10-19 22:19:42,671 - INFO - [6] 1_5 (laser_4; CROSS->PD_2_5, BAR->PD_1_5): swing 26% of input, fit R2 1.00, phase span 1.2 pi, V_pi 3.86 V; CROSS 1.79 V, 50:50 3.26 V, BAR ~4.20 V (5 deg short); extinction 12 dB; back at 0 V -1.6% -> PASS
+2026-10-19 22:20:08,132 - INFO - [6] 5_1 (laser_5; CROSS->PD_3_5, BAR->PD_1_5): swing 40% of input, fit R2 1.00, phase span 1.3 pi, V_pi 3.74 V; CROSS ~0.00 V (28 deg short), 50:50 2.19 V, BAR 3.43 V; extinction 30 dB; back at 0 V -0.3% -> PASS
+2026-10-19 22:20:10,641 - INFO - Saved heater_sweep_20261019_221707.npz/.json/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 22:20:10,641 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 22:20:10,641 - INFO - Resetting board lasers (board number 0)
+2026-10-19 22:20:10,648 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 22:20:10,680 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

@@ -1,0 +1,13 @@
+WARNING: double-read NI task unavailable (Specified channel cannot be added to the task, because a channel with the same name is already in the task.
+Channel Name: Dev1/ai0
+
+Task Name: _unnamedTask<1>
+
+Status Code: -200489); falling back to pydaq group_vin, which lets each channel pick up part of the previous one
+readout_check 20261019_220602: each laser alone at 10.0 V; carry-over onto the next-scanned channel
+  laser_1: PD_1_0 1415 nA -> next PD_2_0: group_vin 33.6%, read_pds 33.6% -> FAIL
+  laser_2: PD_2_0 1551 nA -> next PD_3_0: group_vin 17.8%, read_pds 17.8% -> FAIL
+  laser_3: PD_3_0 1458 nA -> next PD_4_0: group_vin 14.1%, read_pds 14.1% -> FAIL
+  laser_4: PD_4_0 1706 nA -> next PD_5_0: group_vin 33.7%, read_pds 33.7% -> FAIL
+  laser_5: PD_5_0 1918 nA -> next PD_6_0: group_vin 33.1%, read_pds 33.1% -> FAIL
+  laser_6: PD_6_0 2097 nA -> next PD_1_5: group_vin 65.1%, read_pds 65.0% -> FAIL

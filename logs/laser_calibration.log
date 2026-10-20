@@ -36,3 +36,58 @@
 2026-10-19 18:26:30,488 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-19 18:26:30,526 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
 2026-10-19 18:26:30,587 - INFO - NI DAQ task closed during cleanup.
+2026-10-19 22:35:44,080 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 22:35:44,081 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 22:35:44,218 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 22:35:44,218 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 22:35:44,219 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 22:35:44,376 - INFO - Searching for connected DAQ boards...
+2026-10-19 22:35:44,391 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 22:35:44,493 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 22:35:44,494 - INFO - Received UID: PICO-001
+2026-10-19 22:35:44,494 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 22:35:44,494 - INFO - Device ID = PICO-001
+2026-10-19 22:35:44,494 - INFO - Initializing board definitions for PICO-001
+2026-10-19 22:35:44,494 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 22:35:44,497 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 22:35:44,497 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 22:35:45,500 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 22:35:45,501 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 22:35:45,519 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:35:45,519 - INFO - laser_calibration 20261019_223545, pulse test 0.0 -> 10.0 V
+2026-10-19 22:35:50,671 - INFO - Detector readout mode: slow
+2026-10-19 22:39:30,483 - INFO - [A] laser_1 (PD_1_0): 0 V 0.8 nA, 7 V 18 nA, 10 V 2104 nA; threshold ~7.2 V, slope above it 745 nA/V; on/off (0 vs 10 V) 34 dB; voltage for equal power (2104 nA) 10.00 V
+2026-10-19 22:39:30,484 - INFO - [A] laser_2 (PD_2_0): 0 V 0.3 nA, 7 V 23 nA, 10 V 2363 nA; threshold ~7.2 V, slope above it 856 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.67 V
+2026-10-19 22:39:30,485 - INFO - [A] laser_3 (PD_3_0): 0 V 0.3 nA, 7 V 18 nA, 10 V 2171 nA; threshold ~7.4 V, slope above it 813 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.93 V
+2026-10-19 22:39:30,486 - INFO - [A] laser_4 (PD_4_0): 0 V -0.7 nA, 7 V 20 nA, 10 V 2488 nA; threshold ~7.3 V, slope above it 897 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.71 V
+2026-10-19 22:39:30,487 - INFO - [A] laser_5 (PD_5_0): 0 V -0.1 nA, 7 V 27 nA, 10 V 2839 nA; threshold ~7.4 V, slope above it 1110 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.26 V
+2026-10-19 22:39:30,488 - INFO - [A] laser_6 (PD_6_0): 0 V -0.2 nA, 7 V 29 nA, 10 V 3185 nA; threshold ~7.3 V, slope above it 1181 nA/V; on/off (0 vs 10 V) 36 dB; voltage for equal power (2104 nA) 9.14 V
+2026-10-19 22:39:30,836 - INFO - [B] One detector read takes 47 ms; pulses are 71 ms; periods [2.0, 0.5, 0.2] s
+2026-10-19 22:40:05,417 - INFO - [B] laser_1: isolated pulse 2117 nA; vs isolated: 2 Hz 1.00, 5 Hz 0.99; last/first in train 0.99-1.00; pulse-to-pulse spread up to 0.4%; level between pulses rises up to 0.0 nA -> PASS
+2026-10-19 22:40:39,958 - INFO - [B] laser_2: isolated pulse 2465 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.00; last/first in train 1.00-1.00; pulse-to-pulse spread up to 0.2%; level between pulses rises up to 0.6 nA -> PASS
+2026-10-19 22:41:14,923 - INFO - [B] laser_3: isolated pulse 2187 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.01; last/first in train 1.00-1.01; pulse-to-pulse spread up to 1.0%; level between pulses rises up to -0.1 nA -> PASS
+2026-10-19 22:41:49,488 - INFO - [B] laser_4: isolated pulse 2551 nA; vs isolated: 2 Hz 1.00, 5 Hz 0.97; last/first in train 0.98-1.00; pulse-to-pulse spread up to 1.2%; level between pulses rises up to 0.3 nA -> PASS
+2026-10-19 22:42:24,244 - INFO - [B] laser_5: isolated pulse 2903 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.00; last/first in train 1.00-1.00; pulse-to-pulse spread up to 0.1%; level between pulses rises up to 0.0 nA -> PASS
+2026-10-19 22:42:58,833 - INFO - [B] laser_6: isolated pulse 3110 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.00; last/first in train 1.00-1.00; pulse-to-pulse spread up to 0.1%; level between pulses rises up to 0.1 nA -> PASS
+2026-10-19 22:43:00,061 - INFO - Saved laser_calibration_20261019_223545.npz/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 22:43:00,061 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 22:43:00,061 - INFO - Resetting board lasers (board number 0)
+2026-10-19 22:43:00,068 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 22:43:00,105 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 22:43:53,083 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 22:43:53,084 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 22:43:53,219 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 22:43:53,219 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 22:43:53,220 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 22:43:53,335 - INFO - Searching for connected DAQ boards...
+2026-10-19 22:43:53,351 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 22:43:53,453 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 22:43:53,454 - INFO - Received UID: PICO-001
+2026-10-19 22:43:53,454 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 22:43:53,454 - INFO - Device ID = PICO-001
+2026-10-19 22:43:53,454 - INFO - Initializing board definitions for PICO-001
+2026-10-19 22:43:53,454 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 22:43:53,457 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 22:43:53,458 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 22:43:54,459 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 22:43:54,460 - INFO - HSOK: Handshake with PICO-001 successful.

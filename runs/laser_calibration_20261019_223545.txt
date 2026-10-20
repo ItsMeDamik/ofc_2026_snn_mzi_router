@@ -1,0 +1,15 @@
+laser_calibration 20261019_223545, pulse test 0.0 -> 10.0 V
+Detector readout mode: slow
+[A] laser_1 (PD_1_0): 0 V 0.8 nA, 7 V 18 nA, 10 V 2104 nA; threshold ~7.2 V, slope above it 745 nA/V; on/off (0 vs 10 V) 34 dB; voltage for equal power (2104 nA) 10.00 V
+[A] laser_2 (PD_2_0): 0 V 0.3 nA, 7 V 23 nA, 10 V 2363 nA; threshold ~7.2 V, slope above it 856 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.67 V
+[A] laser_3 (PD_3_0): 0 V 0.3 nA, 7 V 18 nA, 10 V 2171 nA; threshold ~7.4 V, slope above it 813 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.93 V
+[A] laser_4 (PD_4_0): 0 V -0.7 nA, 7 V 20 nA, 10 V 2488 nA; threshold ~7.3 V, slope above it 897 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.71 V
+[A] laser_5 (PD_5_0): 0 V -0.1 nA, 7 V 27 nA, 10 V 2839 nA; threshold ~7.4 V, slope above it 1110 nA/V; on/off (0 vs 10 V) 35 dB; voltage for equal power (2104 nA) 9.26 V
+[A] laser_6 (PD_6_0): 0 V -0.2 nA, 7 V 29 nA, 10 V 3185 nA; threshold ~7.3 V, slope above it 1181 nA/V; on/off (0 vs 10 V) 36 dB; voltage for equal power (2104 nA) 9.14 V
+[B] One detector read takes 47 ms; pulses are 71 ms; periods [2.0, 0.5, 0.2] s
+[B] laser_1: isolated pulse 2117 nA; vs isolated: 2 Hz 1.00, 5 Hz 0.99; last/first in train 0.99-1.00; pulse-to-pulse spread up to 0.4%; level between pulses rises up to 0.0 nA -> PASS
+[B] laser_2: isolated pulse 2465 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.00; last/first in train 1.00-1.00; pulse-to-pulse spread up to 0.2%; level between pulses rises up to 0.6 nA -> PASS
+[B] laser_3: isolated pulse 2187 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.01; last/first in train 1.00-1.01; pulse-to-pulse spread up to 1.0%; level between pulses rises up to -0.1 nA -> PASS
+[B] laser_4: isolated pulse 2551 nA; vs isolated: 2 Hz 1.00, 5 Hz 0.97; last/first in train 0.98-1.00; pulse-to-pulse spread up to 1.2%; level between pulses rises up to 0.3 nA -> PASS
+[B] laser_5: isolated pulse 2903 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.00; last/first in train 1.00-1.00; pulse-to-pulse spread up to 0.1%; level between pulses rises up to 0.0 nA -> PASS
+[B] laser_6: isolated pulse 3110 nA; vs isolated: 2 Hz 1.00, 5 Hz 1.00; last/first in train 1.00-1.00; pulse-to-pulse spread up to 0.1%; level between pulses rises up to 0.1 nA -> PASS

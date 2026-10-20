@@ -1,0 +1,8 @@
+Detector readout mode: slow
+laser_interaction 20261019_224416: lasers [2, 3, 4, 5, 6] at 10.00 V, 10.00 V, 10.00 V, 10.00 V, 10.00 V; each other laser toggled 3x (3 s on / 3 s off)
+  laser_2 power when another laser turns on (fast/settled): laser_3 +0.5/+0.5%, laser_4 +0.4/+0.4%, laser_5 +0.4/+0.4%, laser_6 +0.3/+0.2%
+  laser_3 power when another laser turns on (fast/settled): laser_2 +0.2/+0.3%, laser_4 +0.6/+0.1%, laser_5 +0.6/+0.9%, laser_6 +1.1/+1.9%
+  laser_4 power when another laser turns on (fast/settled): laser_2 +0.7/+0.8%, laser_3 +0.2/-0.2%, laser_5 +0.6/+0.7%, laser_6 +0.7/+0.7%
+  laser_5 power when another laser turns on (fast/settled): laser_2 +0.6/+0.7%, laser_3 +0.5/+0.6%, laser_4 +0.3/+0.3%, laser_6 +0.2/-0.1%
+  laser_6 power when another laser turns on (fast/settled): laser_2 +0.8/+0.6%, laser_3 +0.4/+0.5%, laser_4 +0.5/+0.7%, laser_5 +0.2/-0.1%
+Largest settled change 1.9% -> no meaningful interaction

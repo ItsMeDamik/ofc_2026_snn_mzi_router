@@ -174,7 +174,8 @@ def main() -> None:
                 # together (laser powers shift when both are on), then the light should simply add
                 p_in = [PD_NETS.index(inputs[a]) for a in active]
                 expected = sum(T[a] * I_all[i] for a, i in zip(active, p_in))
-                sum_err = max(abs(I_all[r] / expected[r] - 1) for r in rx if expected[r] > cs.LIT_NA)
+                used = [rx[x] for dests in active.values() for x in dests]    # intended receivers only
+                sum_err = max(abs(I_all[r] / expected[r] - 1) for r in used)
                 power_shift = {names[a]: I_all[i] / I[a, i] - 1 for a, i in zip(active, p_in)}
                 ok = min(sxr.values()) >= SXR_TARGET_DB and sum_err <= SUM_TOL
                 report(f"[{name}]   {' | '.join(lines)}")

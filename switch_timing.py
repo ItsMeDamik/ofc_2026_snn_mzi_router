@@ -5,6 +5,10 @@
         leaves on row 2 (PD_1_5); at CROSS (C) it goes to C3 and C4, so PD_4_5 lights up.
       - "4_2": setting A <-> D. Only C3's laser (row 4) is on. With 4_2 at CROSS (D) its light
         goes to C5 (PD_6_5); at BAR (A) it leaves elsewhere.
+      - "--laser-step": no heater; a laser itself is switched while its own input detector is
+        recorded. A laser switches far faster than a heater, so this shows how fast the
+        detector circuit can follow: if it also takes ~30 us, heater rise times are limited by
+        the detector, not the heater.
     Each switch is repeated in both directions (heating and cooling differ). From each trace:
       - command delay: from sending the heater command until the light starts to change
         (our control path: Python -> USB serial -> Pico -> AD5370 DAC); the timing of the
@@ -17,6 +21,7 @@
     Usage (from the repo root on the lab PC; about 2 min):
         python switch_timing.py
         python switch_timing.py --heaters 2_2 --repeats 30
+        python switch_timing.py --laser-step           # detector speed check
 '''
 import argparse
 import json
@@ -73,6 +78,7 @@ def main() -> None:
     parser.add_argument("--repeats", type=int, default=20, help="switches per direction")
     parser.add_argument("--routes", type=Path, default=ROOT / "sim" / "routes_rows2-6.json")
     parser.add_argument("--v-max", type=float, default=4.2)
+    parser.add_argument("--laser-step", action="store_true", help="switch laser_3 instead of a heater (detector speed)")
     args = parser.parse_args()
 
     routes = json.loads(args.routes.read_text())
@@ -96,6 +102,9 @@ def main() -> None:
         try:
             report(f"switch_timing {stamp}: {RATE / 1e3:.0f} kS/s, {1e3 * WINDOW_S:.0f} ms per switch, "
                    f"{args.repeats} switches per direction, lasers at {LASER_V} V")
+            if args.laser_step:
+                laser_step(args.repeats, data)
+                args.heaters = []
             for heater in args.heaters:
                 (s_from, s_to), core, pd = TESTS[heater]
                 laser = routes["lasers"][core]
@@ -145,6 +154,36 @@ def main() -> None:
             out.with_suffix(".txt").write_text("\n".join(cs.summary) + "\n")
             plot(data, out.with_suffix(".png"))
             report(f"Saved {out.name}.npz/.txt/.png in {out.parent}")
+
+
+def laser_step(repeats: int, data: dict, laser: str = "laser_3", pd: str = "PD_3_0") -> None:
+    '''Switches one laser on and off while recording its input detector at RATE.'''
+    set_lasers(0.0)
+    for net in cs.HEATER_NETS:
+        netlist[net].vout(0.0)
+    sleep(2.0)
+    task = open_recorder(pd)
+    results = {"laser on": [], "laser off": []}
+    traces = {k: [] for k in results}
+    for _ in range(repeats):
+        for label, v in (("laser on", LASER_V), ("laser off", 0.0)):
+            task.start()
+            t0 = perf_counter()
+            sleep(PRE_S)
+            t_cmd = perf_counter()
+            netlist[laser].vout(v)
+            y = -np.array(task.read(number_of_samples_per_channel=int(RATE * WINDOW_S)))
+            task.stop()
+            t = np.arange(len(y)) / RATE
+            results[label].append(edges(y, t, t_cmd - t0))
+            traces[label].append(y)
+            sleep(0.3)
+    task.close()
+    for label, res in results.items():
+        rise = np.array([r["rise"] for r in res]) * 1e6
+        report(f"[detector speed] {label} ({pd}, {laser}): rise 10-90% {np.nanmedian(rise):.0f} us "
+               f"(range {np.nanmin(rise):.0f}-{np.nanmax(rise):.0f}); {np.isfinite(rise).sum()}/{len(res)} clean steps")
+        data[f"laser_{label.replace(' ', '_')}"] = np.array(traces[label])
 
 
 def plot(data: dict, path: Path) -> None:

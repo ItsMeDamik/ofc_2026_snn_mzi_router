@@ -1,0 +1,38 @@
+2026-10-20 00:48:54,479 - INFO - Found 1 NI DAQ device(s):
+2026-10-20 00:48:54,480 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-20 00:48:54,615 - INFO - Found 2 MCC DAQ device(s):
+2026-10-20 00:48:54,615 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-20 00:48:54,615 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-20 00:48:54,723 - INFO - Searching for connected DAQ boards...
+2026-10-20 00:48:54,742 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-20 00:48:54,844 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-20 00:48:54,844 - INFO - Received UID: PICO-001
+2026-10-20 00:48:54,844 - INFO - Found 1 serial DAQ board(s):
+2026-10-20 00:48:54,844 - INFO - Device ID = PICO-001
+2026-10-20 00:48:54,845 - INFO - Initializing board definitions for PICO-001
+2026-10-20 00:48:54,845 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-20 00:48:54,847 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-20 00:48:54,847 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-20 00:48:55,848 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-20 00:48:55,848 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-20 00:48:55,869 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-20 00:48:57,003 - INFO - Detector readout mode: slow
+2026-10-20 00:48:59,032 - INFO - pd_check 20261020_004855: laser_5 at 10.0 V; watching ['PD_6_5', 'PD_6_3', 'PD_3_5', 'PD_5_0']
+2026-10-20 00:49:03,082 - INFO -   setting A, cycle 1: laser on  PD_6_5  1486.3, PD_6_3  1877.4, PD_3_5    25.4, PD_5_0  2759.2 nA
+2026-10-20 00:49:03,083 - INFO -                        laser off PD_6_5     1.3, PD_6_3     3.2, PD_3_5     1.6, PD_5_0     2.4 nA
+2026-10-20 00:49:07,110 - INFO -   setting A, cycle 2: laser on  PD_6_5  1536.0, PD_6_3  1953.5, PD_3_5    29.6, PD_5_0  2875.7 nA
+2026-10-20 00:49:07,110 - INFO -                        laser off PD_6_5     2.6, PD_6_3     3.4, PD_3_5     2.9, PD_5_0     3.1 nA
+2026-10-20 00:49:11,124 - INFO -   setting A, cycle 3: laser on  PD_6_5  1544.4, PD_6_3  1969.5, PD_3_5    30.8, PD_5_0  2880.8 nA
+2026-10-20 00:49:11,125 - INFO -                        laser off PD_6_5     3.2, PD_6_3     5.9, PD_3_5     3.4, PD_5_0     4.1 nA
+2026-10-20 00:49:15,223 - INFO -   setting A, cycle 4: laser on  PD_6_5  1551.0, PD_6_3  1969.7, PD_3_5    32.7, PD_5_0  2938.2 nA
+2026-10-20 00:49:15,223 - INFO -                        laser off PD_6_5     3.7, PD_6_3     5.5, PD_3_5     4.2, PD_5_0     4.6 nA
+2026-10-20 00:49:19,243 - INFO -   setting A, cycle 5: laser on  PD_6_5  1522.4, PD_6_3  1928.2, PD_3_5    31.9, PD_5_0  2819.4 nA
+2026-10-20 00:49:19,243 - INFO -                        laser off PD_6_5     4.6, PD_6_3     6.2, PD_3_5     4.6, PD_5_0     5.2 nA
+2026-10-20 00:49:19,243 - INFO - [1] PD_6_5 on 1528 nA vs off 3.1 nA -> PASS
+2026-10-20 00:49:19,243 - INFO - [2] PD_6_3 (same row-6 path) on 1940 nA -> PASS
+2026-10-20 00:49:22,255 - INFO - [3] setting B, laser on: PD_6_5 9.4 nA (0.6% of A), PD_3_5 1648 nA (light moved there) -> PASS
+2026-10-20 00:49:22,321 - INFO - Saved pd_check_20261020_004855.txt
+2026-10-20 00:49:22,321 - INFO - Resetting board NI (board number Dev1)
+2026-10-20 00:49:22,321 - INFO - Resetting board lasers (board number 0)
+2026-10-20 00:49:22,327 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-20 00:49:22,361 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

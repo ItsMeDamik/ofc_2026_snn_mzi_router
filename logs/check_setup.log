@@ -1,0 +1,45 @@
+2026-10-19 17:00:41,973 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 17:00:41,974 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 17:00:42,109 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 17:00:42,109 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 17:00:42,110 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 17:00:42,251 - INFO - Searching for connected DAQ boards...
+2026-10-19 17:00:42,267 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 17:00:42,370 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 17:00:42,370 - INFO - Received UID: PICO-001
+2026-10-19 17:00:42,371 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 17:00:42,371 - INFO - Device ID = PICO-001
+2026-10-19 17:00:42,371 - INFO - Initializing board definitions for PICO-001
+2026-10-19 17:00:42,371 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 17:00:42,373 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 17:00:42,373 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 17:00:43,375 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 17:00:43,376 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 17:00:43,415 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 17:00:43,416 - INFO - check_setup 20261019_170043, laser voltage 7.0 V, settle 30 s, stability 600 s
+2026-10-19 17:00:43,416 - INFO - [0] Boards in netlist: ['NI', 'PICO-001', 'lasers']. 31 heater nets -> PASS
+2026-10-19 17:01:18,627 - INFO - [1] Dark level 0.840-0.936 V, noise 0.19-0.31 nA -> PASS
+2026-10-19 17:01:48,681 - INFO - [2] laser_1: lights nothing; strongest input only 12 nA -> FAIL
+2026-10-19 17:02:23,744 - INFO - [2] laser_2: lights nothing; strongest input only 15 nA -> FAIL
+2026-10-19 17:02:58,782 - INFO - [2] laser_3: lights nothing; strongest input only 11 nA -> FAIL
+2026-10-19 17:03:33,828 - INFO - [2] laser_4: lights nothing; strongest input only 14 nA -> FAIL
+2026-10-19 17:04:08,873 - INFO - [2] laser_5: lights nothing; strongest input only 17 nA -> FAIL
+2026-10-19 17:04:43,894 - INFO - [2] laser_6: lights nothing; strongest input only 18 nA -> FAIL
+2026-10-19 17:05:18,985 - INFO - [3] lasers 1-1 on: each laser vs alone = [n/a], inputs total 16 nA -> PASS
+2026-10-19 17:05:48,996 - INFO - [3] lasers 1-2 on: each laser vs alone = [n/a, n/a], inputs total 37 nA -> PASS
+2026-10-19 17:06:19,035 - INFO - [3] lasers 1-3 on: each laser vs alone = [n/a, n/a, n/a], inputs total 54 nA -> PASS
+2026-10-19 17:06:49,147 - INFO - [3] lasers 1-4 on: each laser vs alone = [n/a, n/a, n/a, n/a], inputs total 76 nA -> PASS
+2026-10-19 17:07:19,171 - INFO - [3] lasers 1-5 on: each laser vs alone = [n/a, n/a, n/a, n/a, n/a], inputs total 100 nA -> PASS
+2026-10-19 17:07:49,214 - INFO - [3] lasers 1-6 on: each laser vs alone = [n/a, n/a, n/a, n/a, n/a, n/a], inputs total 118 nA -> PASS
+2026-10-19 17:17:49,682 - INFO - [4] PD_1_0: only 16 nA with lasers on -> FAIL
+2026-10-19 17:17:49,683 - INFO - [4] PD_2_0: only 19 nA with lasers on -> FAIL
+2026-10-19 17:17:49,684 - INFO - [4] PD_3_0: only 16 nA with lasers on -> FAIL
+2026-10-19 17:17:49,685 - INFO - [4] PD_4_0: only 18 nA with lasers on -> FAIL
+2026-10-19 17:17:49,686 - INFO - [4] PD_5_0: only 22 nA with lasers on -> FAIL
+2026-10-19 17:17:49,687 - INFO - [4] PD_6_0: only 25 nA with lasers on -> FAIL
+2026-10-19 17:17:51,030 - INFO - Saved check_setup_20261019_170043.npz/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 17:17:51,030 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 17:17:51,030 - INFO - Resetting board lasers (board number 0)
+2026-10-19 17:17:51,037 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 17:17:51,073 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 17:17:51,140 - INFO - NI DAQ task closed during cleanup.

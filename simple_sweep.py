@@ -42,7 +42,7 @@ with netlist:
         netlist=netlist
     )
 
-    lasers.set_voltages([10, 7, 7, 7])  # Initialize all lasers to 0V
+    lasers.set_voltages([7, 7, 7, 7])  # Initialize all lasers to 0V
     sleep(2)
 
     input_readings = np.full((100, 4), np.nan)  # Initialize an array to store the input detector readings

@@ -1,0 +1,10 @@
+spike_replay 20261019_233619: digits [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] (1500 SNN steps of 2 ms), slot 15 ms, pulse 6 ms, 5211 commands, 23.5 s
+  command timing: median 0.90 ms late, max 94.1 ms, 562 of 5211 more than 2 ms late
+  C1 receiver PD_1_5 (no optical traffic to it): largest signal 158 nA
+  C2 receiver PD_3_5 (no optical traffic to it): largest signal 465 nA
+  C3 receiver PD_4_5 (from C1 623 nA, from C2 614 nA): 1426/1430 spikes, 4 missed, false 0 while another core fired + 0 otherwise -> FAIL
+  C4 receiver PD_5_5 (from C1 682 nA, from C2 676 nA): 1426/1430 spikes, 4 missed, false 0 while another core fired + 0 otherwise -> FAIL
+  C5 receiver PD_6_5 (from C3 1385 nA, from C4 1545 nA): 1091/1094 spikes, 3 missed, false 0 while another core fired + 0 otherwise -> FAIL
+  laser drive check: 6 slots where a laser input disagreed with the command
+  spike packets: 96052 in total, 56314 planned by light (58.6%), 55944 delivered (99.34% of planned)
+  overall: 3954 optical spike slots, 11 errors -> FAIL

@@ -28,3 +28,29 @@
 2026-10-19 23:11:46,481 - INFO - Resetting board lasers (board number 0)
 2026-10-19 23:11:46,487 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-19 23:11:46,520 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:16:34,113 - INFO - Found 1 NI DAQ device(s):
+2026-10-19 23:16:34,114 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-19 23:16:34,251 - INFO - Found 2 MCC DAQ device(s):
+2026-10-19 23:16:34,251 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-19 23:16:34,251 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-19 23:16:34,359 - INFO - Searching for connected DAQ boards...
+2026-10-19 23:16:34,375 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-19 23:16:34,478 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-19 23:16:34,478 - INFO - Received UID: PICO-001
+2026-10-19 23:16:34,478 - INFO - Found 1 serial DAQ board(s):
+2026-10-19 23:16:34,478 - INFO - Device ID = PICO-001
+2026-10-19 23:16:34,479 - INFO - Initializing board definitions for PICO-001
+2026-10-19 23:16:34,479 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-19 23:16:34,480 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-19 23:16:34,481 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-19 23:16:35,483 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-19 23:16:35,483 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-19 23:16:35,515 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-19 23:16:35,515 - INFO - switch_timing 20261019_231635: 250 kS/s, 100 ms per switch, 20 switches per direction, lasers at 10.0 V
+2026-10-19 23:16:54,551 - INFO - [detector speed] laser on (PD_3_0, laser_3): rise 10-90% 20 us (range 16-20); 20/20 clean steps
+2026-10-19 23:16:54,552 - INFO - [detector speed] laser off (PD_3_0, laser_3): rise 10-90% 20 us (range 20-20); 20/20 clean steps
+2026-10-19 23:16:55,382 - INFO - Saved switch_timing_20261019_231635.npz/.txt/.png in C:\Users\lab\Desktop\ofc_2026_snn_mzi_router\runs
+2026-10-19 23:16:55,382 - INFO - Resetting board NI (board number Dev1)
+2026-10-19 23:16:55,382 - INFO - Resetting board lasers (board number 0)
+2026-10-19 23:16:55,388 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-19 23:16:55,424 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

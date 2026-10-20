@@ -1,0 +1,3 @@
+heater_sweep 20261019_182705, heaters 0-4.2 V in 41 steps, laser 10.0 V, settle 50 ms per step
+[6] 1_1 (laser_1; CROSS->PD_6_5, BAR->PD_4_5): swing 44% of input, fit R2 1.00, phase span 1.1 pi, V_pi 4.07 V; CROSS nan V, 50:50 2.08 V, BAR 3.55 V; extinction 16 dB; back at 0 V +0.9% -> PASS
+[6] 5_1 (laser_5; CROSS->PD_3_5, BAR->PD_1_5): swing 38% of input, fit R2 1.00, phase span 1.2 pi, V_pi 3.83 V; CROSS nan V, 50:50 2.13 V, BAR 3.45 V; extinction 10 dB; back at 0 V -4.6% -> PASS

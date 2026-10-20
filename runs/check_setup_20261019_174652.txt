@@ -1,0 +1,21 @@
+check_setup 20261019_174652, laser voltage 10.0 V, settle 10 s, stability 120 s
+[0] Boards in netlist: ['NI', 'PICO-001', 'lasers']. 31 heater nets -> PASS
+[1] Dark level 0.840-0.936 V, noise 0.16-0.31 nA -> PASS
+[2] laser_1: lights PD_1_0, PD_2_0, PD_3_0; brightest PD_1_0 1331 nA, change during settle -6.5%, outputs total 721 nA -> FAIL
+[2] laser_2: lights PD_1_0, PD_2_0, PD_3_0, PD_4_0; brightest PD_2_0 1513 nA, change during settle -4.3%, outputs total 1118 nA -> FAIL
+[2] laser_3: lights PD_1_0, PD_3_0, PD_4_0, PD_5_0; brightest PD_3_0 1495 nA, change during settle +2.2%, outputs total 1257 nA -> FAIL
+[2] laser_4: lights PD_1_0, PD_3_0, PD_4_0, PD_5_0, PD_6_0; brightest PD_4_0 1751 nA, change during settle +0.7%, outputs total 1226 nA -> FAIL
+[2] laser_5: lights PD_1_0, PD_4_0, PD_5_0, PD_6_0; brightest PD_5_0 1714 nA, change during settle -11.4%, outputs total 1946 nA -> FAIL
+[2] laser_6: lights PD_1_0, PD_6_0; brightest PD_6_0 2026 nA, change during settle -4.3%, outputs total 2871 nA -> FAIL
+[3] lasers 1-1 on: each laser vs alone = [1.00], inputs total 1909 nA -> PASS
+[3] lasers 1-2 on: each laser vs alone = [1.13, 1.29], inputs total 4041 nA -> FAIL
+[3] lasers 1-3 on: each laser vs alone = [1.19, 1.31, 1.22], inputs total 5934 nA -> FAIL
+[3] lasers 1-4 on: each laser vs alone = [1.25, 1.34, 1.32, 1.21], inputs total 8730 nA -> FAIL
+[3] lasers 1-5 on: each laser vs alone = [1.36, 1.37, 1.33, 1.29, 1.46], inputs total 11463 nA -> FAIL
+[3] lasers 1-6 on: each laser vs alone = [1.41, 1.41, 1.35, 1.29, 1.46, 1.43], inputs total 13666 nA -> FAIL
+[4] PD_1_0: 1898 nA, settles within 2% after 0 s, drift after 1.6%, jumps 0 -> PASS
+[4] PD_2_0: 2152 nA, settles within 2% after 0 s, drift after 1.0%, jumps 0 -> PASS
+[4] PD_3_0: 1978 nA, settles within 2% after 16 s, drift after 2.4%, jumps 0 -> FAIL
+[4] PD_4_0: 2245 nA, settles within 2% after 0 s, drift after 1.5%, jumps 0 -> PASS
+[4] PD_5_0: 2556 nA, settles within 2% after 17 s, drift after 2.3%, jumps 0 -> FAIL
+[4] PD_6_0: 2855 nA, settles within 2% after 0 s, drift after 0.9%, jumps 0 -> PASS

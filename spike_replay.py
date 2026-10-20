@@ -25,6 +25,7 @@
 '''
 import argparse
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 from time import perf_counter, sleep
@@ -42,6 +43,7 @@ SCAN_RATE = 800.0          # scans/s for 10 channels at 100 us each
 CONVERT_RATE = 10e3
 MIN_SAMPLES = 2            # consecutive samples above threshold for a detection
 LATE_MS = 2.0              # commands executed later than this count as overruns
+FAULT_MS = 3.0             # a slot with any command this late is a software timing fault, reported apart
 
 
 def main() -> None:
@@ -54,6 +56,9 @@ def main() -> None:
     args = parser.parse_args()
     import nidaqmx
     from nidaqmx.constants import AcquisitionType
+    if sys.platform == "win32":                 # fewer stalls of the command loop
+        import ctypes
+        ctypes.windll.kernel32.SetPriorityClass(ctypes.windll.kernel32.GetCurrentProcess(), 0x80)  # HIGH_PRIORITY_CLASS
 
     rp = json.loads(args.replay.read_text())
     routes = json.loads(args.routes.read_text())
@@ -80,13 +85,13 @@ def main() -> None:
         t_k = T0 + k * slot
         for s in w["links"]:
             if st["fired"][int(s)]:
-                events.append((t_k, 1, lasers[int(s)], LASER_V))
-                events.append((t_k + pulse, 0, lasers[int(s)], 0.0))
+                events.append((t_k, 1, lasers[int(s)], LASER_V, k))
+                events.append((t_k + pulse, 0, lasers[int(s)], 0.0, k))
         if k % wsteps == wsteps - 1 and k // wsteps + 1 < len(windows):     # next window's heaters
             nxt, cur = windows[k // wsteps + 1]["setting"], w["setting"]
             for m in vset[nxt]:
                 if vset[nxt][m] != vset[cur][m]:
-                    events.append((t_k + pulse + 0.001, 2, f"{m}_i", vset[nxt][m]))
+                    events.append((t_k + pulse + 0.001, 2, f"{m}_i", vset[nxt][m], k))
     events.sort(key=lambda e: (e[0], e[1]))
     duration = T0 + len(steps) * slot + 0.5
     n = int(duration * SCAN_RATE)
@@ -115,7 +120,7 @@ def main() -> None:
             task.start()
             t0 = perf_counter()
             late = []
-            for t_ev, kind, target, v in events:
+            for t_ev, kind, target, v, _ in events:
                 sleep(max(0.0, t_ev - (perf_counter() - t0)))
                 late.append(perf_counter() - t0 - t_ev)
                 netlist[target].vout(v)
@@ -125,7 +130,14 @@ def main() -> None:
             late = np.array(late) * 1e3
             report(f"  command timing: median {np.median(late):.2f} ms late, max {late.max():.1f} ms, "
                    f"{(late > LATE_MS).sum()} of {len(late)} more than {LATE_MS:.0f} ms late")
-            res = analyze(y, nets, steps, windows, wsteps, rp, routes, T0, slot, pulse)
+            # slots touched by a late command (this slot's pulse, or a heater change just before it)
+            faulted = np.zeros(len(steps), bool)
+            for (_, kind, _, _, k), lt in zip(events, late):
+                if lt > FAULT_MS:
+                    faulted[k] = True
+                    if kind == 2 and k + 1 < len(steps):
+                        faulted[k + 1] = True
+            res = analyze(y, nets, steps, windows, wsteps, rp, routes, T0, slot, pulse, faulted)
             np.savez_compressed(out.with_suffix(".npz"), y=y, nets=np.array(nets), late_ms=late,
                                 **{k: np.array(v) for k, v in res.pop("arrays").items()})
             out.with_suffix(".json").write_text(json.dumps(res, indent=2, default=float))
@@ -148,7 +160,7 @@ def runs_above(x: np.ndarray, thr: float) -> int:
     return best
 
 
-def analyze(y, nets, steps, windows, wsteps, rp, routes, T0, slot, pulse) -> dict:
+def analyze(y, nets, steps, windows, wsteps, rp, routes, T0, slot, pulse, faulted) -> dict:
     '''Per-slot detection on every receiver and laser input, compared with the schedule.'''
     t = np.arange(y.shape[1]) / SCAN_RATE
     nslot, ncore = len(steps), len(routes["lasers"])
@@ -209,9 +221,19 @@ def analyze(y, nets, steps, windows, wsteps, rp, routes, T0, slot, pulse) -> dic
     report(f"  spike packets: {total} in total, {planned} planned by light ({100 * planned / total:.1f}%), "
            f"{delivered} delivered ({100 * delivered / max(planned, 1):.2f}% of planned)")
     report(f"  overall: {exp_total} optical spike slots, {errs} errors -> {verdict(errs == 0)}")
-    return {"receivers": lines, "packets_total": total, "packets_planned": int(planned),
+    # split errors by whether the software kept time in that slot
+    exp = sender >= 0
+    err = (exp & ~det) | (~exp & det)
+    err[:, [j for j in range(ncore) if not exp[:, j].any()]] = False        # receivers with no traffic
+    on_time = ~faulted
+    report(f"  timing faults: {faulted.sum()} slots had a command more than {FAULT_MS:.0f} ms late; "
+           f"errors in on-time slots {int(err[on_time].sum())} of {int(exp[on_time].sum())} optical spikes, "
+           f"in faulted slots {int(err[faulted].sum())} of {int(exp[faulted].sum())}")
+    return {"receivers": lines, "timing_fault_slots": int(faulted.sum()),
+            "errors_on_time": int(err[on_time].sum()), "spikes_on_time": int(exp[on_time].sum()),
+            "packets_total": total, "packets_planned": int(planned),
             "packets_delivered": int(delivered), "drive_errors": drive_err,
-            "arrays": {"sender": sender, "detected": det, "fired": fired}}
+            "arrays": {"sender": sender, "detected": det, "fired": fired, "faulted": faulted}}
 
 
 if __name__ == "__main__":

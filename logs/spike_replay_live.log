@@ -1,0 +1,22 @@
+2026-10-20 22:06:38,708 - INFO - Found 1 NI DAQ device(s):
+2026-10-20 22:06:38,709 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-20 22:06:39,409 - INFO - Found 2 MCC DAQ device(s):
+2026-10-20 22:06:39,409 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-20 22:06:39,410 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-20 22:06:39,525 - INFO - Searching for connected DAQ boards...
+2026-10-20 22:06:39,568 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-20 22:06:39,670 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-20 22:06:39,672 - INFO - Received UID: PICO-001
+2026-10-20 22:06:39,673 - INFO - Found 1 serial DAQ board(s):
+2026-10-20 22:06:39,673 - INFO - Device ID = PICO-001
+2026-10-20 22:06:39,674 - INFO - Initializing board definitions for PICO-001
+2026-10-20 22:06:39,674 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-20 22:06:39,679 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-20 22:06:39,679 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-20 22:06:40,683 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-20 22:06:40,683 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-20 22:06:40,805 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-20 22:06:59,544 - INFO - Resetting board NI (board number Dev1)
+2026-10-20 22:06:59,544 - INFO - Resetting board lasers (board number 0)
+2026-10-20 22:06:59,551 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-20 22:06:59,583 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']

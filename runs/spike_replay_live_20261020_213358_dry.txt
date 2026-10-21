@@ -1,0 +1,22 @@
+spike_replay_live 20261020_213358 (DRY RUN): digits 0-1, pulse 1 ms on / 1 ms off, gap 8 ms, recalibration every 1 digits, streaming 3 entries/scan
+  laser mode SERIAL: one v_out per channel (0.90 ms each); link 2 is delayed by one call and on/off are stretched to >= 1.2 x calls per edge
+  digit 1/2 done, 10.9 s elapsed, ~11 s left
+  run: 300 steps, 5770 pulse slots, 7686 laser pulses, 15436 commands; pulse-command lateness median 0.00 ms, 807 > 2 ms, 514 > 3 ms, max 50.4 ms; schedule slips 473
+clock alignment: 36 calibration edges, DAQ = -241.25 ms + PC x (1 +40.4 ppm), residual rms 0.085 ms, max 0.141 ms
+C3 PD_4_5: spike levels over 3 calibrations (nA) C1 616-622, C2 623-629; threshold 308-311 nA
+C4 PD_5_5: spike levels over 3 calibrations (nA) C1 678-684, C2 687-694; threshold 339-342 nA
+C5 PD_6_5: spike levels over 3 calibrations (nA) C3 1386-1399, C4 1569-1584; threshold 693-700 nA
+300 SNN steps, 5770 pulse slots (serial mode, 1/1 ms), 7686 laser pulses sent, 13456 received pulses expected
+overall: 13023/13456 hits, 433 misses, false 0 while another core fired + 0 with nothing firing + 0 in heater gaps -> error rate 3.22e-02 per received pulse (95% CI 2.9e-02-3.5e-02)
+excluding 661 timing-fault slots: 11721/11821 hits, 100 misses, false 0 while another core fired + 0 with nothing firing + 0 in heater gaps -> error rate 8.46e-03 per received pulse (95% CI 6.9e-03-1.0e-02)
+  C3 PD_4_5: 5594/5770, 176 missed, false 0 + 0 + 0 (gaps)
+  C4 PD_5_5: 5594/5770, 176 missed, false 0 + 0 + 0 (gaps)
+  C5 PD_6_5: 1835/1916, 81 missed, false 0 + 0 + 0 (gaps)
+misses by how late the pulse's commands took effect: 0-1 ms 26/8097, 1-1.5 ms 12/3170, 1.5-2 ms 0/124, 2-3 ms 62/590, 3-inf ms 333/1475
+timing (lateness = command took effect vs schedule): pulse commands late median 0.92 ms, p99 5.90 ms, max 51.5 ms; 1602 > 2 ms, 1108 > 3 ms of 15372; call 0.90 ms; 473 schedule slips (2.01 s); wall time 20 s
+errors in 661 timing-fault slots: 333; in on-time slots: 100 (timing faults DOMINATE the errors)
+controller: 60 windows, settings {'A': 12, 'B': 11, 'C': 28, 'D': 9}, decision max 0.55 ms, heater commands max 10.3 ms; vs export_replay.py: window 0 live A (no history, started from A) / export C; windows 1+: 0 mismatches []; live packet counts == export's
+pulse -> neuron map: 518/518 (step, link) pulse trains equal the senders' spiking neurons in ascending order
+dry run: 43 injected lost pulses (pulse, receiver), 43 found as undelivered (same neurons), 0 not found, 390 other misses (330 in timing-fault slots)
+accuracy on 2 digits: software 50.0%, chip (all 433 undelivered spikes removed, 333 of them in timing-fault slots) 50.0%, 0 predictions changed; numpy rerun reproduces recorded h1 spikes in 2/2 digits
+bus: 23046 packets, 13456 sent by light (58.4%), 13023 delivered (96.782%); 99th-pct delay at 1.5x capacity 14.6 ms bus only vs 0.0 ms with lanes

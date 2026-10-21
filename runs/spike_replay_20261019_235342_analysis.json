@@ -1,0 +1,104 @@
+{
+  "run": "spike_replay_20261019_235342.npz",
+  "fault_threshold_ms": 3.0,
+  "commands": 52431,
+  "overall": {
+    "optical_spikes": 39812,
+    "errors": 29,
+    "error_rate": 0.0007284235908771225
+  },
+  "timing_fault_slots": 394,
+  "on_time": {
+    "optical_spikes": 38810,
+    "errors": 2,
+    "error_rate": 5.15331100231899e-05
+  },
+  "faulted": {
+    "optical_spikes": 1002,
+    "errors": 27
+  },
+  "slots_with_errors": [
+    745,
+    746,
+    747,
+    749,
+    3461,
+    7090,
+    7091,
+    7092,
+    7094,
+    8619,
+    9463,
+    11465,
+    11466,
+    13102,
+    13103,
+    13104,
+    13105
+  ],
+  "error_slots_not_faulted": [
+    7094
+  ],
+  "accuracy": {
+    "digits": 100,
+    "software": 0.91,
+    "with_chip_detections": 0.91,
+    "predictions_changed": 0,
+    "note": "uses all detections, including timing-faulted slots"
+  },
+  "bus": {
+    "offload_delivered": 0.5832850935819284,
+    "mean_load_pkts_per_ms": 34.83756666666667,
+    "peak_over_mean": 4.248287528692685,
+    "0.8x": {
+      "bus_only": {
+        "mean_ms": 3625.420074012924,
+        "p99_ms": 7714.382997129504
+      },
+      "with_lanes": {
+        "mean_ms": 1.8451716882892384,
+        "p99_ms": 23.21923504033482
+      }
+    },
+    "1.0x": {
+      "bus_only": {
+        "mean_ms": 392.5131339266923,
+        "p99_ms": 1007.4430070985179
+      },
+      "with_lanes": {
+        "mean_ms": 0.5107037033138873,
+        "p99_ms": 11.313510300662042
+      }
+    },
+    "1.2x": {
+      "bus_only": {
+        "mean_ms": 26.5504882331045,
+        "p99_ms": 141.51772043014645
+      },
+      "with_lanes": {
+        "mean_ms": 0.13171540058449038,
+        "p99_ms": 4.629027496179894
+      }
+    },
+    "1.5x": {
+      "bus_only": {
+        "mean_ms": 5.227261616881646,
+        "p99_ms": 41.23191807311455
+      },
+      "with_lanes": {
+        "mean_ms": 0.01473278290580954,
+        "p99_ms": 0.2964600283027825
+      }
+    },
+    "2.0x": {
+      "bus_only": {
+        "mean_ms": 1.1692744446687653,
+        "p99_ms": 17.875552540504657
+      },
+      "with_lanes": {
+        "mean_ms": 5.39606510341167e-05,
+        "p99_ms": 0.0
+      }
+    }
+  }
+}

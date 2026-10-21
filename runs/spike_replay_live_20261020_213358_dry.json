@@ -1,0 +1,263 @@
+{
+  "run": "spike_replay_live_20261020_213358_dry.npz",
+  "dry_run": true,
+  "laser_mode": "serial",
+  "on_ms": 1.0,
+  "off_ms": 1.0,
+  "gap_ms": 8.0,
+  "digits": [
+    0,
+    1
+  ],
+  "steps": 300,
+  "pulse_slots": 5770,
+  "laser_pulses_sent": 7686,
+  "received_pulses_expected": 13456,
+  "command_latency_used_ms": 0.91733349702805,
+  "clock_fit": {
+    "offset_ms": -241.2507466305651,
+    "drift_ppm": 40.36836808962718,
+    "edges": 36,
+    "residual_rms_ms": 0.08509834766274799
+  },
+  "overall": {
+    "expected": 13456,
+    "hits": 13023,
+    "misses": 433,
+    "false_other_core": 0,
+    "false_nothing": 0,
+    "false_in_gaps": 0,
+    "errors": 433,
+    "error_rate": 0.032178953626634955,
+    "error_rate_95ci": [
+      0.029261562218732065,
+      0.03530087908046473
+    ]
+  },
+  "excluding_timing_faults": {
+    "expected": 11821,
+    "hits": 11721,
+    "misses": 100,
+    "false_other_core": 0,
+    "false_nothing": 0,
+    "false_in_gaps": 0,
+    "errors": 100,
+    "error_rate": 0.008459521191100584,
+    "error_rate_95ci": [
+      0.00688815230327036,
+      0.010279618758933939
+    ]
+  },
+  "timing_fault_slots": 661,
+  "receivers": {
+    "C3": {
+      "receiver": "PD_4_5",
+      "expected": 5770,
+      "hits": 5594,
+      "misses": 176,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    },
+    "C4": {
+      "receiver": "PD_5_5",
+      "expected": 5770,
+      "hits": 5594,
+      "misses": 176,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    },
+    "C5": {
+      "receiver": "PD_6_5",
+      "expected": 1916,
+      "hits": 1835,
+      "misses": 81,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    }
+  },
+  "timing": {
+    "pulse_cmd_late_ms": {
+      "median": 0.9238750017483977,
+      "p90": 2.119179502956569,
+      "p99": 5.89731606548316,
+      "max": 51.51716700778586,
+      "over_2ms": 1602,
+      "over_3ms": 1108,
+      "n": 15372
+    },
+    "pulse_cmd_start_late_ms": {
+      "median": 0.0001250064629587655,
+      "p99": 4.527525755411355,
+      "over_3ms": 514
+    },
+    "pulse_cmd_duration_ms": 0.9038329953909852,
+    "heater_cmd_late_ms": {
+      "median": 3.140791492119821,
+      "max": 14.297625004548564,
+      "n": 40
+    },
+    "schedule_slips": 473,
+    "slip_total_s": 2.010022625975876,
+    "wall_time_s": 20.143505082989577
+  },
+  "errors_in_faulted_slots": 333,
+  "errors_in_on_time_slots": 100,
+  "misses_by_lateness": [
+    {
+      "late_ms": [
+        0,
+        1
+      ],
+      "received_expected": 8097,
+      "misses": 26
+    },
+    {
+      "late_ms": [
+        1,
+        1.5
+      ],
+      "received_expected": 3170,
+      "misses": 12
+    },
+    {
+      "late_ms": [
+        1.5,
+        2
+      ],
+      "received_expected": 124,
+      "misses": 0
+    },
+    {
+      "late_ms": [
+        2,
+        3
+      ],
+      "received_expected": 590,
+      "misses": 62
+    },
+    {
+      "late_ms": [
+        3,
+        Infinity
+      ],
+      "received_expected": 1475,
+      "misses": 333
+    }
+  ],
+  "controller": {
+    "windows": 60,
+    "decision_ms_max": 0.5501250125234947,
+    "decision_ms_median": 0.054042000556364655,
+    "heater_ms_max": 10.34825000537154,
+    "settings": {
+      "A": 12,
+      "B": 11,
+      "C": 28,
+      "D": 9
+    },
+    "heater_changes": 30,
+    "export_mismatches": [
+      0
+    ],
+    "export_window0": {
+      "setting": "C",
+      "links": {
+        "0": [
+          2,
+          3
+        ],
+        "3": [
+          4
+        ]
+      }
+    },
+    "live_window0": {
+      "setting": "A",
+      "inp": 1,
+      "hid": 3
+    },
+    "live_counts_equal_export": true
+  },
+  "mapping_check": {
+    "step_links": 518,
+    "mismatched": 0
+  },
+  "dry_run_check": {
+    "injected": 43,
+    "found": 43,
+    "missed_injections": 0,
+    "extra_misses": 390,
+    "extra_in_faulted_slots": 330
+  },
+  "accuracy": {
+    "digits": 2,
+    "software": 0.5,
+    "chip": 0.5,
+    "predictions_changed": 0,
+    "undelivered_spikes": 433,
+    "undelivered_in_faulted_slots": 333,
+    "rerun_reproduces_recorded_h1": "2/2",
+    "note": "all undelivered spikes removed, including timing-faulted slots; false detections map to no neuron and are not added"
+  },
+  "bus": {
+    "packets_total": 23046,
+    "packets_planned_optical": 13456,
+    "packets_delivered_optical": 13023,
+    "offload_delivered": 0.5650872168706066,
+    "mean_load_pkts_per_ms": 38.41,
+    "peak_over_mean": 2.9028898724290553,
+    "0.8x": {
+      "bus_only": {
+        "mean_ms": 112.92678035233854,
+        "p99_ms": 177.01154907576097
+      },
+      "with_lanes": {
+        "mean_ms": 1.0691720906014064,
+        "p99_ms": 11.631494402499344
+      }
+    },
+    "1.0x": {
+      "bus_only": {
+        "mean_ms": 33.34083485203521,
+        "p99_ms": 65.30058318146334
+      },
+      "with_lanes": {
+        "mean_ms": 0.15738436171136003,
+        "p99_ms": 3.9152928924759194
+      }
+    },
+    "1.2x": {
+      "bus_only": {
+        "mean_ms": 7.647533339118874,
+        "p99_ms": 28.207451184587367
+      },
+      "with_lanes": {
+        "mean_ms": 0.008581677225259663,
+        "p99_ms": 0.3575423066909664
+      }
+    },
+    "1.5x": {
+      "bus_only": {
+        "mean_ms": 2.2437154676154933,
+        "p99_ms": 14.6070797535364
+      },
+      "with_lanes": {
+        "mean_ms": 0.00010240388787642168,
+        "p99_ms": 0.0
+      }
+    },
+    "2.0x": {
+      "bus_only": {
+        "mean_ms": 0.1842905493361106,
+        "p99_ms": 3.508674824264516
+      },
+      "with_lanes": {
+        "mean_ms": 0.0,
+        "p99_ms": 0.0
+      }
+    }
+  }
+}

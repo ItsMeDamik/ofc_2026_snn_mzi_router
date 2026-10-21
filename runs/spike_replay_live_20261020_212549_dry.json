@@ -1,0 +1,216 @@
+{
+  "run": "spike_replay_live_20261020_212549_dry.npz",
+  "dry_run": true,
+  "laser_mode": "scan",
+  "on_ms": 1.0,
+  "off_ms": 1.0,
+  "gap_ms": 8.0,
+  "digits": [
+    0,
+    1
+  ],
+  "steps": 300,
+  "pulse_slots": 5770,
+  "laser_pulses_sent": 7686,
+  "received_pulses_expected": 13456,
+  "command_latency_used_ms": 0.9151664955395766,
+  "clock_fit": {
+    "offset_ms": -251.2631227168936,
+    "drift_ppm": 38.83958703365664,
+    "edges": 36,
+    "residual_rms_ms": 0.0771306216451323
+  },
+  "overall": {
+    "expected": 13456,
+    "hits": 12902,
+    "misses": 554,
+    "false_other_core": 0,
+    "false_nothing": 0,
+    "false_in_gaps": 0,
+    "errors": 554,
+    "error_rate": 0.041171224732461355,
+    "error_rate_95ci": [
+      0.03787658689077893,
+      0.04466610529531295
+    ]
+  },
+  "excluding_timing_faults": {
+    "expected": 12835,
+    "hits": 12492,
+    "misses": 343,
+    "false_other_core": 0,
+    "false_nothing": 0,
+    "false_in_gaps": 0,
+    "errors": 343,
+    "error_rate": 0.026723802103622907,
+    "error_rate_95ci": [
+      0.024002493171156037,
+      0.029662458778968306
+    ]
+  },
+  "timing_fault_slots": 269,
+  "receivers": {
+    "C3": {
+      "receiver": "PD_4_5",
+      "expected": 5770,
+      "hits": 5531,
+      "misses": 239,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    },
+    "C4": {
+      "receiver": "PD_5_5",
+      "expected": 5770,
+      "hits": 5537,
+      "misses": 233,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    },
+    "C5": {
+      "receiver": "PD_6_5",
+      "expected": 1916,
+      "hits": 1834,
+      "misses": 82,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    }
+  },
+  "timing": {
+    "pulse_cmd_late_ms": {
+      "median": 0.00012500863544318008,
+      "p90": 0.07600840047918836,
+      "p99": 4.210971396547345,
+      "max": 50.43616699602804,
+      "over_2ms": 410,
+      "over_3ms": 269,
+      "n": 11540
+    },
+    "pulse_cmd_duration_ms": 0.9037499985424802,
+    "heater_cmd_late_ms": {
+      "median": 0.056312499509658664,
+      "max": 11.787958994391445,
+      "n": 40
+    },
+    "schedule_slips": 382,
+    "slip_total_s": 1.7099087079648556,
+    "wall_time_s": 14.79544945798989
+  },
+  "errors_in_faulted_slots": 211,
+  "errors_in_on_time_slots": 343,
+  "controller": {
+    "windows": 60,
+    "decision_ms_max": 0.46187499538064003,
+    "decision_ms_median": 0.05312499706633389,
+    "heater_ms_max": 6.554625011631288,
+    "settings": {
+      "A": 12,
+      "B": 11,
+      "C": 28,
+      "D": 9
+    },
+    "heater_changes": 30,
+    "export_mismatches": [
+      0
+    ],
+    "export_window0": {
+      "setting": "C",
+      "links": {
+        "0": [
+          2,
+          3
+        ],
+        "3": [
+          4
+        ]
+      }
+    },
+    "live_window0": {
+      "setting": "A",
+      "inp": 1,
+      "hid": 3
+    },
+    "live_counts_equal_export": true
+  },
+  "mapping_check": {
+    "step_links": 518,
+    "mismatched": 0
+  },
+  "dry_run_check": {
+    "injected": 53,
+    "found": 53,
+    "missed_injections": 0,
+    "extra_misses": 501,
+    "extra_in_faulted_slots": 208
+  },
+  "accuracy": {
+    "digits": 2,
+    "software": 0.5,
+    "chip": 0.5,
+    "predictions_changed": 0,
+    "undelivered_spikes": 554,
+    "undelivered_in_faulted_slots": 211,
+    "rerun_reproduces_recorded_h1": "2/2",
+    "note": "all undelivered spikes removed, including timing-faulted slots; false detections map to no neuron and are not added"
+  },
+  "bus": {
+    "packets_total": 23046,
+    "packets_planned_optical": 13456,
+    "packets_delivered_optical": 12902,
+    "offload_delivered": 0.5598368480430443,
+    "mean_load_pkts_per_ms": 38.41,
+    "peak_over_mean": 2.9028898724290553,
+    "0.8x": {
+      "bus_only": {
+        "mean_ms": 112.92678035233854,
+        "p99_ms": 177.01154907576097
+      },
+      "with_lanes": {
+        "mean_ms": 1.1205788423153697,
+        "p99_ms": 12.281064826867999
+      }
+    },
+    "1.0x": {
+      "bus_only": {
+        "mean_ms": 33.34083485203521,
+        "p99_ms": 65.30058318146334
+      },
+      "with_lanes": {
+        "mean_ms": 0.17529636379415098,
+        "p99_ms": 4.383613642280658
+      }
+    },
+    "1.2x": {
+      "bus_only": {
+        "mean_ms": 7.647533339118874,
+        "p99_ms": 28.207451184587367
+      },
+      "with_lanes": {
+        "mean_ms": 0.011982990540657884,
+        "p99_ms": 0.5144892823049578
+      }
+    },
+    "1.5x": {
+      "bus_only": {
+        "mean_ms": 2.2437154676154933,
+        "p99_ms": 14.6070797535364
+      },
+      "with_lanes": {
+        "mean_ms": 0.0002759697995313727,
+        "p99_ms": 0.0
+      }
+    },
+    "2.0x": {
+      "bus_only": {
+        "mean_ms": 0.1842905493361106,
+        "p99_ms": 3.508674824264516
+      },
+      "with_lanes": {
+        "mean_ms": 0.0,
+        "p99_ms": 0.0
+      }
+    }
+  }
+}

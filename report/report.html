@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Optical Spike Router Report</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+  :root { --ink: #1c2330; --muted: #5a6475; --line: #d7dce4; --accent: #c8314a; --soft: #f3f5f8; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.45; margin: 0; }
+  h1 { font-size: 22pt; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 14px; }
+  h2 { font-size: 14pt; margin: 22px 0 6px; padding-bottom: 3px; border-bottom: 2px solid var(--ink); break-after: avoid; }
+  h3 { font-size: 11pt; margin: 14px 0 4px; break-after: avoid; }
+  p { margin: 4px 0 7px; }
+  ul, ol { margin: 4px 0 8px; padding-left: 20px; }
+  li { margin: 2px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.4pt; break-inside: avoid; }
+  th, td { border-bottom: 1px solid var(--line); padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: var(--soft); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  figure { margin: 10px 0 12px; break-inside: avoid; }
+  figure img { width: 100%; display: block; }
+  figcaption { font-size: 9pt; color: var(--muted); margin-top: 3px; }
+  figcaption b { color: var(--ink); }
+  .box { background: var(--soft); border-left: 3px solid var(--accent); padding: 7px 10px; margin: 8px 0 10px; break-inside: avoid; }
+  .box p { margin: 2px 0; }
+  .glossary td:first-child { font-weight: 600; white-space: nowrap; width: 22%; }
+  code { font-family: Menlo, monospace; font-size: 8.8pt; background: #eef1f5; padding: 0 3px; border-radius: 3px; }
+  .pb { break-before: page; }
+  .key { font-size: 11pt; }
+</style>
+</head>
+<body>
+
+<h1>Optical spike router: what we did and what we found</h1>
+<p class="sub">Working notes for understanding, not a paper. Data from 19–20 October 2026 (lab PC runs in <code>runs/</code>, simulation in <code>sim/</code>).</p>
+
+<div class="box key">
+<p><b>One-paragraph summary.</b> We used the photonic chip's MZI mesh as a small optical switchboard that carries the busiest
+spike traffic between five emulated neuromorphic cores. After calibrating the lasers, detectors and heaters, and fixing a
+detector readout problem and a laser cross-talk problem, the router delivered 39,812 replayed spikes with 29 errors (7.3×10<sup>−4</sup>), 27 of them during software stalls (2 in the 38,810 time-kept slots), switched
+routes in about 35 µs, carried 58% of all spike packets, and left the network's accuracy unchanged (91.0%). A model of the shared bus
+shows this removes queueing delay when traffic approaches the bus's limit; a scaling study shows the benefit holds best when traffic is
+concentrated on a few core pairs.</p>
+</div>
+
+<h2>Words used in this report</h2>
+<table class="glossary">
+<tr><td>Spike / spike packet</td><td>A neuron "firing". When a neuron fires, its core sends a small message (a packet) to every other core that holds neurons listening to it.</td></tr>
+<tr><td>Core</td><td>A piece of the neural network running on one part of a neuromorphic chip. Here we have 5 cores, emulated in software.</td></tr>
+<tr><td>Bus</td><td>The single shared electronic connection all cores use to send packets. If many packets arrive at once, they wait in a queue (congestion).</td></tr>
+<tr><td>MZI</td><td>Mach–Zehnder interferometer: a two-lane optical switch on the chip. A heater on it sets how the light leaves.</td></tr>
+<tr><td>BAR / CROSS / 50:50</td><td>The three MZI positions we use. BAR: light stays in its lane. CROSS: light swaps to the other lane. 50:50: light splits evenly into both.</td></tr>
+<tr><td>Mesh / router</td><td>The grid of MZIs. By setting each MZI, light from any laser can be steered to chosen output detectors.</td></tr>
+<tr><td>Setting (A–D)</td><td>One complete choice of MZI positions, i.e. one routing pattern.</td></tr>
+<tr><td>Detector, photocurrent (nA)</td><td>On-chip photodiodes convert light to current; more light = more nA. Our noise floor is about 0.25 nA.</td></tr>
+<tr><td>Crosstalk, dB</td><td>Light arriving from the wrong sender. "20 dB below" means 100× weaker than the real signal (10 dB = 10×, 30 dB = 1,000×).</td></tr>
+<tr><td>Controller</td><td>Software that, every 10 ms of network time, picks the routing that would carry the most traffic.</td></tr>
+<tr><td>Replay (time-scaled)</td><td>Running the network's real spike pattern through the chip in slow motion (here 7.5× slower than real time).</td></tr>
+</table>
+
+<h2>1. The goal</h2>
+<p>A spiking neural network (SNN) on a neuromorphic chip is split across several cores. Every spike that leaves a core is sent as a packet over one
+shared electronic bus. Spiking activity comes in bursts, so the bus periodically gets crowded and packets wait.</p>
+<p><b>Idea:</b> add a few <b>optical express lanes</b>. Each core gets a laser (to send) and a photodiode (to receive); the chip's MZI mesh acts as a
+switchboard connecting the busiest sender→receiver pairs with light. Everything else stays on the bus. A controller re-points the switchboard as
+traffic changes. One rule: each photodiode listens to only one sender at a time (otherwise it couldn't tell who fired); one sender may feed several
+receivers by splitting its light (multicast).</p>
+<figure><img src="figs/f01_concept.png"><figcaption><b>Figure 1. The concept.</b> Five cores send on the left (lasers) and receive on the right (photodiodes). The MZI router decides which laser's light reaches which photodiode; packets not carried by light use the shared bus.</figcaption></figure>
+
+<h2>2. The setup</h2>
+<ul>
+<li><b>Chip:</b> 6 waveguide rows, 13 MZIs arranged in 5 columns. Each MZI has a heater ("<code>r_c</code>" = MZI joining rows r and r+1 in column c).</li>
+<li><b>Lasers:</b> six, one per row, driven by a USB-3114 analog output (0–10 V).</li>
+<li><b>Heaters:</b> driven by an AD5370 DAC through a Pico microcontroller over USB serial.</li>
+<li><b>Detectors:</b> 16 on-chip photodiodes read by an NI USB-6210: one at each row's input (<code>PD_r_0</code>), one at each row's output (<code>PD_r_5</code>), and four inside the mesh.</li>
+<li><b>Workflow:</b> scripts written on the Mac, run on the lab PC, results pushed back through git and analysed on the Mac.</li>
+</ul>
+<figure><img src="figs/f02_setup.png"><figcaption><b>Figure 2. Hardware.</b> All instruments are commanded from Python on the lab PC. Commands go over USB, which turned out to be the main speed limit.</figcaption></figure>
+
+<h2>3. What we did, step by step</h2>
+
+<div class="step">
+<h3>Step 1: getting the software and a first look</h3>
+<ul>
+<li>Fixed the Python project file (it pointed to Mac-only library paths), freed disk space, and installed the libraries.</li>
+<li>Wrote <code>check_setup.py</code>: checks the boards connect, measures detector noise (about 0.25 nA) and which laser lights which row.</li>
+<li><b>Each laser feeds its own row</b> (laser k → row k).</li>
+<li><b>First surprise: the light was very weak.</b> At the 7 V we first used, each laser produced only ~15 nA. At 10 V it was ~100× more. Reason below.</li>
+</ul>
+</div>
+
+<div class="step">
+<h3>Step 2: understanding the mesh</h3>
+<p>With all heaters at 0 V, each laser's light came out at a very specific output. That pattern matches a simple rule: <b>at 0 V every MZI sits
+close to CROSS</b>, so light zig-zags one row per column. This also confirmed the mesh layout we had inferred from the wiring names.
+The four internal detectors lit up exactly where the zig-zag passes.</p>
+<figure><img src="figs/f03_mesh_zigzag.png"><figcaption><b>Figure 3. The mesh and the zig-zag test.</b> Left: layout, with two example zig-zag paths. Right: for every laser, the brightest output (red box) is exactly the one the zig-zag predicts. Not all light follows the path (the MZIs are near CROSS, not exactly at it).</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Step 3: calibrating the lasers (<code>laser_calibration.py</code>)</h3>
+<ul>
+<li>Stepped each laser from 0 to 10 V. <b>Lasing starts between 7.1 and 7.5 V</b> (the threshold); below that the laser only glows weakly. That explains the dim light in Step 1.</li>
+<li>On/off contrast between 0 V and 10 V: 37–40 dB (about 5,000×).</li>
+<li>Pulse test: pulses keep the same height whether isolated or repeated (no heating effect at our speeds).</li>
+</ul>
+<figure><img src="figs/f04_lasers.png"><figcaption><b>Figure 4. Laser power vs control voltage.</b> The log plot (right) shows the threshold clearly: a slow rise, then a sharp increase above ~7.3 V.</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Step 4: calibrating the heaters (<code>heater_sweep.py</code>)</h3>
+<p>For each MZI, we lit one laser whose light passes through it, swept the heater from 0 to 4.2 V, and watched the two outputs trade light. A fitted
+curve gives the voltage for CROSS, 50:50 and BAR.</p>
+<ul>
+<li><b>12 of 13 MZIs work cleanly</b> (near-perfect fits). BAR needs 3.1–4.2 V; CROSS is at or near 0 V.</li>
+<li><b>MZI <code>1_5</code> is faulty:</b> in 2 of 4 runs it jumped suddenly near 1 V and then stopped responding. We never drive it.</li>
+<li>Some MZIs cannot reach a perfect CROSS below 4.2 V. Your senior colleague's note (heaters stop tuning near 5 V) confirmed we should not go higher. Heaters are ~200 Ω cold, up to ~400 Ω hot.</li>
+</ul>
+<figure><img src="figs/f05_heaters.png"><figcaption><b>Figure 5. Heater calibration.</b> Left: a good MZI; the light moves smoothly from one output to the other as the heater warms (dotted lines: chosen CROSS, 50:50 and BAR voltages). Right: MZI 1_5 in three runs; twice it jumped in the grey region and got stuck.</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Step 5: choosing the router: 5×5 on rows 2–6</h3>
+<ul>
+<li>A fully programmable 6×6 needs 15 MZIs in 6 columns; the chip has 13 in 5. So the full 6×6 cannot make every routing pattern.</li>
+<li>Any five neighbouring rows form a complete 5×5. <b>We use rows 2–6</b> because rows 1–5 would depend on the faulty <code>1_5</code>.</li>
+<li>Row 1 is closed off by holding <code>1_1</code> and <code>1_3</code> at BAR. <code>1_5</code> stays at 0 V, where it sits near CROSS, so the light for core C1 simply exits on <code>PD_1_5</code>.</li>
+</ul>
+</div>
+
+<div class="step">
+<h3>Step 6: mapping the neural network onto the chip</h3>
+<ul>
+<li><b>Network:</b> 2,312 inputs (event-camera pixels) → 128 → 64 → 10 outputs, trained on N-MNIST digits. Accuracy 90.9%.</li>
+<li><b>Five cores:</b> C1 = top half of the image, C2 = bottom half, C3/C4 = the two halves of the first hidden layer, C5 = second hidden layer + outputs.</li>
+<li><b>Where traffic goes:</b> C1 and C2 both send to C3 and C4; C3 and C4 both send to C5. So each receiver has two competing senders.</li>
+<li><b>Two heaters do all the switching:</b> <code>2_2</code> chooses which input core (C1 or C2) multicasts to C3+C4 (split 50:50); <code>4_2</code> chooses which hidden core (C3 or C4) sends to C5. The four combinations are settings A–D.</li>
+<li><b>No matrix optimisation is needed.</b> Every MZI is only BAR, CROSS or 50:50, and light from different lasers does not interfere, so a route is just a table of heater voltages.</li>
+</ul>
+<figure><img src="figs/f14_partition.png"><figcaption><b>Figure 6. How the network is split into cores and placed on the chip.</b> Left: an actual test digit's events, split into the top half (C1) and bottom half (C2). Middle: hidden layer 1 split into C3 and C4; hidden layer 2 and the outputs share C5. Arrows show the average traffic over the same 100 test digits used in the replay (34.8 packets/ms in total). Right: which laser and detector each core uses, and the two heaters that choose the optical senders.</figcaption></figure>
+<table>
+<tr><th>Setting</th><th>Light carries</th><th><code>2_2</code></th><th><code>4_2</code></th><th class="num">Used (100-digit replay)</th></tr>
+<tr><td>A</td><td>C2 → C3 + C4, &nbsp;C4 → C5</td><td>BAR</td><td>BAR</td><td class="num">882 windows</td></tr>
+<tr><td>B</td><td>C1 → C3 + C4, &nbsp;C3 → C5</td><td>CROSS</td><td>CROSS</td><td class="num">463</td></tr>
+<tr><td>C</td><td>C1 → C3 + C4, &nbsp;C4 → C5</td><td>CROSS</td><td>BAR</td><td class="num">1,014</td></tr>
+<tr><td>D</td><td>C2 → C3 + C4, &nbsp;C3 → C5</td><td>BAR</td><td>CROSS</td><td class="num">641</td></tr>
+</table>
+</div>
+
+<h2>4. Problems we found, and how we fixed them</h2>
+
+<div class="step">
+<h3>Problem 1: the detector readout leaked between channels</h3>
+<p>The NI board measures its 16 detectors one after another through one shared input. If it moves on too fast, the next measurement still
+contains part of the previous one. <b>Each detector "inherited" about a third of the detector read just before it.</b> This created fake light
+in places light cannot reach, distorted some calibrations, and made every reading about one third too low.</p>
+<p><b>Fix:</b> slow the reading so each detector has 100 µs to settle (<code>read_pds()</code> in <code>check_setup.py</code>). Our first idea (read each
+channel twice) was rejected by the NI driver. After the fix the leak measured about 0%, and we re-ran the calibrations.</p>
+<figure><img src="figs/f06_readout.png"><figcaption><b>Figure 7. Readout artifact.</b> With one laser on, the detector read right after its input detector showed 14–34% fake signal with the old fast reading, and about 0% after the fix. (Laser 6's neighbour genuinely receives its light, so it is left out.)</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Problem 2: lasers changed each other's power</h3>
+<p>To make all lasers equally bright, we first ran them at slightly different voltages (9.1–9.9 V). Then <b>switching one laser on changed
+another's power by up to 37%</b>, instantly (so electrical, not heat). At 10 V the effect disappeared (below 2%). <b>All lasers now run at
+10 V.</b> Their brightness differs a little, which is harmless because each receiver gets its own detection threshold. We don't yet know exactly why
+10 V is immune (the lasers are not saturating there); it does not matter for the results.</p>
+<figure><img src="figs/f07_interaction.png"><figcaption><b>Figure 8. Laser interaction.</b> Each cell: how much a laser's own power changes when another laser turns on. Left: up to +37% at 9.1–9.9 V. Right: all below 2% at 10 V.</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Problem 3: the PC sometimes pauses the program</h3>
+<p>Windows occasionally stalls Python for up to ~90 ms, so a laser isn't pulsed on time. We now flag any time slot where a command ran more than
+3 ms late as a "timing fault" and count its errors separately, so software hiccups are not blamed on the optics. The script also runs at high priority.</p>
+</div>
+
+<h2>5. Measurements of the router</h2>
+
+<div class="step">
+<h3>Routing accuracy and crosstalk (<code>route_check.py</code>)</h3>
+<p>For each setting: set all heaters, turn on each laser alone, and measure where its light goes; then turn on the two active lasers together.</p>
+<ul>
+<li><b>95–99%</b> of each sender's light reaches its intended receivers.</li>
+<li>The multicast splits evenly (within 0.4 dB).</li>
+<li><b>Crosstalk 15–28 dB below the signal</b> at 11 of 12 receivers (one at 14.4 dB). Light from two lasers adds up within 2%.</li>
+</ul>
+<figure><img src="figs/f08_routing.png"><figcaption><b>Figure 9. Routing for settings A–D.</b> Each row is one laser (core), each column an output detector; numbers are the fraction of that laser's light. Red boxes are the intended routes: they hold nearly all the light.</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Switching speed (<code>switch_timing.py</code>)</h3>
+<ul>
+<li>Recorded one detector 250,000 times per second while flipping <code>2_2</code> or <code>4_2</code>, 20 times each way.</li>
+<li><b>A route switches in about 32–36 µs</b> (10–90%) and is fully settled in about 50 µs. Our detectors themselves take about 20 µs (checked by switching a laser), so part of the measured time is the detector.</li>
+<li>The light starts moving about 1 ms after Python sends the command: that is our USB/Pico path, not the chip.</li>
+</ul>
+<figure><img src="figs/f09_switching.png"><figcaption><b>Figure 10. Switching.</b> Left: averaged edges; the heaters (red, blue) are a little slower than the laser/detector check (grey). Right: all 20 switches overlaid; the 1–2 ms delay and its spread come from the software path.</figcaption></figure>
+</div>
+
+<div class="step">
+<h3>Continuous recording (<code>stream_check.py</code>)</h3>
+<p>The board can record detectors continuously while lasers pulse: all 400 pulse detections (80 pulses × 5 detectors) were correct, including
+5 ms pulses, with zero false pulses. Laser switching causes brief one-sample electrical glitches on other detectors; we ignore them by requiring
+two consecutive samples above threshold.</p>
+</div>
+
+<div class="step">
+<h3>Checking the row-6 detector (<code>pd_check.py</code>)</h3>
+<p>A colleague mentioned there might be no detectors on row 6. <code>PD_6_5</code> passed three tests: it follows laser 5 on/off (1,528 nA vs 3 nA,
+five cycles); the mid-chip row-6 detector <code>PD_6_3</code> lights with it; and switching to setting B moves the light away to <code>PD_3_5</code>
+(<code>PD_6_5</code> drops to 0.6%). So row 6 has a working output detector.</p>
+<figure><img src="figs/f13_pd65.png"><figcaption><b>Figure 11. PD_6_5 check.</b> Left: repeatable on/off. Right: re-routing moves the light from row 6 to row 3, showing the detector responds to routing, not stray light.</figcaption></figure>
+</div>
+
+<h2>6. Sending the network's real spikes (<code>spike_replay.py</code>)</h2>
+<ul>
+<li>The network runs in software; its spike pattern is played through the chip in slow motion. <b>Each 2 ms network step becomes a 15 ms slot</b> with a 6 ms laser pulse for every sender that fired.</li>
+<li>Slow because every laser and heater command goes through Python and USB (about 1–3 ms each). The optics are roughly 1,000× faster.</li>
+<li>A pulse means "this core fired during this step"; which neurons fired is not sent by light (that would need much faster modulation).</li>
+<li>Route changes happen in the quiet gap between pulses, so they never cut a spike.</li>
+</ul>
+<figure><img src="figs/f10_replay.png"><figcaption><b>Figure 12. A slice of the replay.</b> Shaded bars mark slots where a spike was sent to that receiver (colour = sender); the black trace is the measured light. Every shaded slot has a pulse, unshaded slots stay dark. Around steps 149–160 the controller gives C5 no optical sender, so its trace stays dark apart from small one-sample glitches when other lasers switch (ignored by the 2-sample rule).</figcaption></figure>
+<table>
+<tr><th>100 test digits (15,000 network steps, 1,328 route changes)</th><th class="num">Result</th></tr>
+<tr><td><b>All optical spikes</b></td><td class="num"><b>39,812 with 29 errors (7.3×10<sup>−4</sup>)</b></td></tr>
+<tr><td>Spikes in slots where the software kept time</td><td class="num">38,810 with 2 errors (5×10<sup>−5</sup>)</td></tr>
+<tr><td>Spikes in slots hit by a software stall</td><td class="num">1,002 with 27 errors</td></tr>
+<tr><td>False spikes (light arriving from the wrong core)</td><td class="num">none in time-kept slots</td></tr>
+<tr><td>Spike packets planned for light / delivered</td><td class="num">609,756 of 1,045,127 (58.3%) / 99.98%</td></tr>
+<tr><td><b>Network accuracy using only the spikes the chip delivered</b></td><td class="num"><b>91.0% = software 91.0%</b> (no answer changed)</td></tr>
+</table>
+<p>The accuracy check reran the network step by step, letting spikes cross an optical link only when the chip had actually detected them.</p>
+
+<h2>7. Does it relieve congestion?</h2>
+<p>The bus is a software model (there is no physical bus to congest), so this part is modelled, but it uses the <b>measured</b> delivery from the
+replay. Carrying 58% of packets by light is like making the bus <b>2.4× faster</b>. Spike traffic is bursty (peaks 4–5× the average), so a bus sized
+for the average still queues at the peaks; the lanes remove most of that queueing.</p>
+<figure><img src="figs/f11_bus.png"><figcaption><b>Figure 13. Bus delay.</b> Left: worst-case (99th-percentile) waiting time vs bus capacity. At 1.5× the average traffic: 41 ms on the bus alone, 0.3 ms with optical lanes (from the replay's measured delivery). Right: traffic over 1.2 s, showing the bursts and how much remains on the bus with lanes.</figcaption></figure>
+<div class="box"><p><b>Honest catch.</b> This small network sends only ~35 packets per millisecond, far below what real neuromorphic buses handle. A real chip running it would not congest. The result applies when a chip's traffic approaches its bus limit (bigger networks, more neurons per core, or slow low-power buses).</p></div>
+
+<h2>8. Does it scale? (<code>sim/scaling.py</code>, simulation)</h2>
+<p>We split the network over more cores (up to 33) and ran the same controller on an ideal larger mesh, for two networks: the original fully
+connected one, and a variant where each first-layer neuron only sees one patch of the image (locally connected, 88.2% accuracy).</p>
+<figure><img src="figs/f12_scaling.png"><figcaption><b>Figure 14. Scaling.</b> Left: share of traffic carried by light; it falls with more cores, much less for the locally connected network. Right: worst-case bus delay at 1.5× capacity, with and without lanes.</figcaption></figure>
+<table>
+<tr><th>Cores</th><th class="num">Fully connected: share by light</th><th class="num">Locally connected: share by light</th><th class="num">Equivalent bus speed-up (local)</th></tr>
+<tr><td>5</td><td class="num">58%</td><td class="num">81%</td><td class="num">5.2×</td></tr>
+<tr><td>9</td><td class="num">38%</td><td class="num">63%</td><td class="num">2.7×</td></tr>
+<tr><td>17</td><td class="num">29%</td><td class="num">52%</td><td class="num">2.1×</td></tr>
+<tr><td>33</td><td class="num">27%</td><td class="num">48%</td><td class="num">1.9×</td></tr>
+</table>
+<ul>
+<li><b>Why it drops:</b> each receiver can listen to only one sender at a time, and in a fully connected network every core talks to every other.</li>
+<li><b>Locality keeps it useful:</b> when traffic is concentrated on a few core pairs, about half still goes by light at 33 cores.</li>
+<li><b>Reconfiguring matters more with more cores</b> (dynamic beats a fixed setting by up to 35%).</li>
+<li><b>Optical limits</b> (estimated from our measured margins): light power allows ~30-port meshes; crosstalk limits it to about 20 ports with this chip's MZI quality.</li>
+</ul>
+
+<h2>9. Final results at a glance</h2>
+<table>
+<tr><th>What</th><th class="num">Result</th></tr>
+<tr><td>Usable router</td><td class="num">5×5 on rows 2–6; 12 of 13 MZIs good (<code>1_5</code> unreliable)</td></tr>
+<tr><td>Laser threshold / operating point</td><td class="num">7.1–7.5 V / all lasers at 10 V</td></tr>
+<tr><td>Detector noise</td><td class="num">~0.25 nA (spikes 600–1,600 nA)</td></tr>
+<tr><td>Light reaching intended receivers</td><td class="num">95–99%</td></tr>
+<tr><td>Multicast split balance</td><td class="num">within 0.4 dB</td></tr>
+<tr><td>Crosstalk margin</td><td class="num">15–28 dB (11 of 12 receivers); 14.4 dB at one</td></tr>
+<tr><td>Route switching time</td><td class="num">~32–36 µs (10–90%), ~50 µs settled</td></tr>
+<tr><td>Spike delivery</td><td class="num">39,812 spikes, 29 errors (7.3×10<sup>−4</sup>); 2 in 38,810 time-kept slots</td></tr>
+<tr><td>Traffic carried by light</td><td class="num">58% (≈ 2.4× bus capacity)</td></tr>
+<tr><td>Network accuracy with the chip</td><td class="num">91.0% = software</td></tr>
+<tr><td>Heater power to hold a setting</td><td class="num">~40 mW per BAR heater, ~0.4 W total (CROSS ≈ free)</td></tr>
+</table>
+
+<h2>10. What it means</h2>
+<p><b>Optical express lanes can carry the busiest spike traffic between cores with essentially no errors and no loss of accuracy, switch routes in
+~35 µs, and relieve bus congestion.</b> They work best when traffic is concentrated on a few core pairs, the same reason hybrid electrical/optical
+switching works in data centres (a slow optical switch for the few heavy flows, electronics for the rest).</p>
+
+<h3>Limitations to keep in mind</h3>
+<ul>
+<li>Only 5 cores; the cores and the bus are emulated in software. Only the optical path is real.</li>
+<li>Slow motion: 7.5× slower than real time, because lasers and heaters are commanded through Python and USB.</li>
+<li>A light pulse carries "this core fired", not which neurons fired.</li>
+<li>Lasers at 10 V (unequal brightness); MZI <code>1_5</code> unreliable; one receiver at 14.4 dB crosstalk.</li>
+<li>Power: ~0.4 W of heater power just to hold a setting, so energy is not a selling point. Lower-power phase shifters exist.</li>
+<li>Beyond 5 cores, results are modelled (ideal mesh assumed; crosstalk growth estimated).</li>
+</ul>
+
+<h2>11. What is left</h2>
+<ul>
+<li>Paper figures (concept, calibration and switching, routing, replay, congestion and scaling) and the 3-page text with the limitations above.</li>
+<li>A short power table and references: bus bandwidths of real chips (Loihi, SpiNNaker), MZI mesh work, hybrid data-centre switching.</li>
+<li>Commit all files and record which run files each number comes from (Appendix).</li>
+<li>Optional: repeat <code>route_check.py</code> on another day (stability); a "link margin" curve (errors vs light level); a fully closed-loop run.</li>
+<li>Ask the colleague what they meant by "no detectors on row 6" (ours works).</li>
+</ul>
+
+<h2 class="pb">Appendix A. Scripts</h2>
+<table>
+<tr><th>Script</th><th>What it does</th></tr>
+<tr><td><code>board_config_6x6.py</code></td><td>Wiring: which board channel is which laser, heater and detector</td></tr>
+<tr><td><code>check_setup.py</code></td><td>Bring-up checks; also holds the detector reader with the readout fix (<code>read_pds</code>)</td></tr>
+<tr><td><code>laser_calibration.py</code></td><td>Laser power curves and pulse test</td></tr>
+<tr><td><code>heater_sweep.py</code></td><td>Heater calibration: BAR / CROSS / 50:50 voltages for each MZI</td></tr>
+<tr><td><code>readout_check.py</code></td><td>Tests the detector readout for leakage between channels</td></tr>
+<tr><td><code>laser_interaction.py</code></td><td>Tests whether lasers change each other's power</td></tr>
+<tr><td><code>route_check.py</code></td><td>Programs settings A–D and measures where the light goes (crosstalk, split, superposition)</td></tr>
+<tr><td><code>switch_timing.py</code></td><td>Measures route switching speed (and detector speed with <code>--laser-step</code>)</td></tr>
+<tr><td><code>stream_check.py</code></td><td>Tests continuous recording while lasers pulse</td></tr>
+<tr><td><code>spike_replay.py</code></td><td>Plays the network's spikes through the chip and checks what arrives</td></tr>
+<tr><td><code>pd_check.py</code></td><td>Verifies one output detector (default <code>PD_6_5</code>)</td></tr>
+<tr><td><code>sim/compile_routes.py</code></td><td>Finds every routing pattern the chip can make and the MZI states for it</td></tr>
+<tr><td><code>sim/traffic.py</code>, <code>sim/export_replay.py</code></td><td>Splits the network into cores, runs the controller, writes the replay schedule</td></tr>
+<tr><td><code>sim/train_snn.py</code>, <code>sim/train_local.py</code></td><td>Train the network (and the locally connected variant); save weights</td></tr>
+<tr><td><code>sim/scaling.py</code></td><td>Scaling study (more cores, bus delay, optical budget)</td></tr>
+<tr><td><code>report/make_figures.py</code></td><td>Regenerates the figures in this report</td></tr>
+</table>
+
+<h2>Appendix B. Where each number comes from</h2>
+<table>
+<tr><th>Result</th><th>Run file(s) in <code>runs/</code></th></tr>
+<tr><td>Zig-zag, laser→row mapping</td><td><code>check_setup_20261019_174652</code></td></tr>
+<tr><td>Laser curves, thresholds</td><td><code>laser_calibration_20261019_223545</code></td></tr>
+<tr><td>Heater calibration (used by all later runs)</td><td><code>heater_sweep_20261019_221707</code> (1_5 also <code>183039</code>, <code>184324</code>, <code>205509</code>)</td></tr>
+<tr><td>Readout artifact before / after</td><td><code>readout_check_20261019_220602</code>, <code>readout_check_20261019_221422</code></td></tr>
+<tr><td>Laser interaction</td><td><code>laser_interaction_20261019_225404</code> (9.1–9.9 V), <code>224416</code> (10 V)</td></tr>
+<tr><td>Routing, crosstalk (10 V)</td><td><code>route_check_20261019_230840</code></td></tr>
+<tr><td>Switching, detector speed</td><td><code>switch_timing_20261019_231107</code>, <code>switch_timing_20261019_231635</code></td></tr>
+<tr><td>Continuous recording</td><td><code>stream_check_20261019_232447</code></td></tr>
+<tr><td>100-digit replay (raw)</td><td><code>spike_replay_20261019_235342</code> + <code>sim/replay_excerpt.json</code></td></tr>
+<tr><td>Error split by timing, accuracy rerun, bus delay</td><td><code>spike_replay_20261019_235342_analysis</code> (made by <code>replay_analysis.py</code>)</td></tr>
+<tr><td>Row-6 detector</td><td><code>pd_check_20261020_004855</code></td></tr>
+<tr><td>Scaling</td><td><code>sim/scaling_results.json</code></td></tr>
+</table>
+
+</body>
+</html>

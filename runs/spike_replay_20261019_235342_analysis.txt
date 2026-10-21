@@ -1,0 +1,6 @@
+spike_replay_20261019_235342.npz: 52431 commands rebuilt and matched to the recorded lateness
+overall: 29 errors in 39812 optical spikes (rate 7.3e-04)
+timing faults (> 3 ms late): 394 slots; on-time: 2 errors in 38810 (rate 5.2e-05); faulted: 27 in 1002
+slots with errors: [745, 746, 747, 749, 3461, 7090, 7091, 7092, 7094, 8619, 9463, 11465, 11466, 13102, 13103, 13104, 13105]; not faulted: [7094]
+accuracy on 100 digits: software 91.0%, with chip detections 91.0%, 0 predictions changed (all detections used)
+bus: 58.3% delivered by light; 99th-pct delay at 1.5x capacity 41.2 ms bus only vs 0.3 ms with lanes

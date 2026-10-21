@@ -1,0 +1,17 @@
+clock alignment: 22 calibration edges, DAQ = -7033.23 ms + PC x (1 +18.0 ppm), residual rms 0.090 ms, max 0.158 ms
+C3 PD_4_5: spike levels over 2 calibrations (nA) C1 590-610, C2 605-606; threshold 295-303 nA
+C4 PD_5_5: spike levels over 2 calibrations (nA) C1 640-672, C2 661-665; threshold 320-333 nA
+C5 PD_6_5: spike levels over 2 calibrations (nA) C3 1332-1368, C4 1532-1638; threshold 666-684 nA
+150 SNN steps, 3245 pulse slots (serial mode, 1/1 ms), 4264 laser pulses sent, 7509 received pulses expected
+overall: 7500/7509 hits, 9 misses, false 0 while another core fired + 0 with nothing firing + 0 in heater gaps -> error rate 1.20e-03 per received pulse (95% CI 5.5e-04-2.3e-03)
+excluding 32 timing-fault slots: 7432/7432 hits, 0 misses, false 0 while another core fired + 0 with nothing firing + 0 in heater gaps -> error rate 0.00e+00 per received pulse (95% CI 0.0e+00-5.0e-04)
+  C3 PD_4_5: 3244/3245, 1 missed, false 0 + 0 + 0 (gaps)
+  C4 PD_5_5: 3244/3245, 1 missed, false 0 + 0 + 0 (gaps)
+  C5 PD_6_5: 1012/1019, 7 missed, false 0 + 0 + 0 (gaps)
+misses by how late the pulse's commands took effect: 0-1 ms 0/1501, 1-1.5 ms 0/5270, 1.5-2 ms 0/651, 2-3 ms 0/12, 3-inf ms 9/75
+timing (lateness = command took effect vs schedule): pulse commands late median 1.03 ms, p99 2.07 ms, max 54.0 ms; 88 > 2 ms, 74 > 3 ms of 8528; call 0.95 ms; 34 schedule slips (0.23 s); wall time 11 s
+errors in 32 timing-fault slots: 9; in on-time slots: 0 (timing faults DOMINATE the errors)
+controller: 30 windows, settings {'A': 6, 'B': 9, 'C': 10, 'D': 5}, decision max 0.25 ms, heater commands max 2.8 ms; vs export_replay.py: window 0 live A (no history, started from A) / export C; windows 1+: 0 mismatches []; live packet counts == export's
+pulse -> neuron map: 265/265 (step, link) pulse trains equal the senders' spiking neurons in ascending order
+accuracy on 1 digits: software 0.0%, chip (all 9 undelivered spikes removed, 9 of them in timing-fault slots) 0.0%, 0 predictions changed; numpy rerun reproduces recorded h1 spikes in 1/1 digits
+bus: 13061 packets, 7509 sent by light (57.5%), 7500 delivered (99.880%); 99th-pct delay at 1.5x capacity 9.3 ms bus only vs 0.0 ms with lanes

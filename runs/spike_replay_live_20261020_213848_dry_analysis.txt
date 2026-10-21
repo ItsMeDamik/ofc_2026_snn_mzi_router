@@ -1,0 +1,19 @@
+clock alignment: 132 calibration edges, DAQ = -243.39 ms + PC x (1 +40.0 ppm), residual rms 0.083 ms, max 0.163 ms
+C3 PD_4_5: spike levels over 11 calibrations (nA) C1 598-634, C2 605-642; threshold 299-317 nA
+C4 PD_5_5: spike levels over 11 calibrations (nA) C1 658-698, C2 667-708; threshold 329-349 nA
+C5 PD_6_5: spike levels over 11 calibrations (nA) C3 1345-1427, C4 1523-1616; threshold 673-714 nA
+15000 SNN steps, 262279 pulse slots (scan mode, 1/1 ms), 347669 laser pulses sent, 609756 received pulses expected
+overall: 588880/609756 hits, 20876 misses, false 182 while another core fired + 0 with nothing firing + 37 in heater gaps -> error rate 3.46e-02 per received pulse (95% CI 3.4e-02-3.5e-02)
+excluding 23571 timing-fault slots: 548949/554849 hits, 5900 misses, false 161 while another core fired + 0 with nothing firing + 37 in heater gaps -> error rate 1.10e-02 per received pulse (95% CI 1.1e-02-1.1e-02)
+  C3 PD_4_5: 253122/262087, 8965 missed, false 0 + 0 + 10 (gaps)
+  C4 PD_5_5: 253112/262087, 8975 missed, false 0 + 0 + 14 (gaps)
+  C5 PD_6_5: 82646/85582, 2936 missed, false 182 + 0 + 13 (gaps)
+misses by how late the pulse's commands took effect: 0-1 ms 1104/378162, 1-1.5 ms 476/157362, 1.5-2 ms 140/2941, 2-3 ms 4187/17264, 3-inf ms 14969/54027
+timing (lateness = command took effect vs schedule): pulse commands late median 0.92 ms, p99 5.53 ms, max 206.1 ms; 39122 > 2 ms, 29435 > 3 ms of 524558; call 0.91 ms; 16457 schedule slips (66.17 s); wall time 619 s
+errors in 23571 timing-fault slots: 14997; in on-time slots: 6061 (timing faults DOMINATE the errors)
+controller: 3000 windows, settings {'A': 882, 'B': 463, 'C': 1014, 'D': 641}, decision max 1.58 ms, heater commands max 25.7 ms; vs export_replay.py: window 0 live A (no history, started from A) / export A; windows 1+: 0 mismatches []; live packet counts == export's
+pulse -> neuron map: 25450/25450 (step, link) pulse trains equal the senders' spiking neurons in ascending order
+dry run: 903 stray 1 ms blips injected over the whole recording (incl. calibration and on top of real pulses), 219 false detections reported
+dry run: 1852 injected lost pulses (pulse, receiver), 1849 found as undelivered (same neurons), 3 not found, 19027 other misses (14765 in timing-fault slots)
+accuracy on 100 digits: software 91.0%, chip (all 20876 undelivered spikes removed, 14976 of them in timing-fault slots) 91.0%, 1 predictions changed; numpy rerun reproduces recorded h1 spikes in 99/100 digits
+bus: 1045127 packets, 609756 sent by light (58.3%), 588880 delivered (96.576%); 99th-pct delay at 1.5x capacity 41.2 ms bus only vs 0.7 ms with lanes

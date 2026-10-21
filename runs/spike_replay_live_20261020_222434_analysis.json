@@ -1,0 +1,352 @@
+{
+  "run": "spike_replay_live_20261020_222434.npz",
+  "dry_run": false,
+  "laser_mode": "serial",
+  "on_ms": 1.0,
+  "off_ms": 1.0,
+  "gap_ms": 8.0,
+  "digits": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  ],
+  "steps": 15000,
+  "pulse_slots": 262279,
+  "laser_pulses_sent": 347669,
+  "received_pulses_expected": 609756,
+  "command_latency_used_ms": 1.0199337993412882,
+  "clock_fit": {
+    "offset_ms": -6487.630295191022,
+    "drift_ppm": 9.048499719721548,
+    "edges": 132,
+    "residual_rms_ms": 0.12057835250655631
+  },
+  "overall": {
+    "expected": 609756,
+    "hits": 609729,
+    "misses": 27,
+    "false_other_core": 0,
+    "false_nothing": 0,
+    "false_in_gaps": 0,
+    "errors": 27,
+    "error_rate": 4.428000708480113e-05,
+    "error_rate_95ci": [
+      2.918100006334958e-05,
+      6.442443659130214e-05
+    ]
+  },
+  "excluding_timing_faults": {
+    "expected": 609168,
+    "hits": 609163,
+    "misses": 5,
+    "false_other_core": 0,
+    "false_nothing": 0,
+    "false_in_gaps": 0,
+    "errors": 5,
+    "error_rate": 8.207916371181678e-06,
+    "error_rate_95ci": [
+      2.665093302567224e-06,
+      1.9154433941088585e-05
+    ]
+  },
+  "timing_fault_slots": 237,
+  "receivers": {
+    "C3": {
+      "receiver": "PD_4_5",
+      "expected": 262087,
+      "hits": 262080,
+      "misses": 7,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    },
+    "C4": {
+      "receiver": "PD_5_5",
+      "expected": 262087,
+      "hits": 262081,
+      "misses": 6,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    },
+    "C5": {
+      "receiver": "PD_6_5",
+      "expected": 85582,
+      "hits": 85568,
+      "misses": 14,
+      "false_other_core": 0,
+      "false_nothing": 0,
+      "false_in_gaps": 0
+    }
+  },
+  "timing": {
+    "pulse_cmd_late_ms": {
+      "median": 1.0221630290869754,
+      "p90": 1.424365873711153,
+      "p99": 1.5670541515891045,
+      "max": 87.70393037434587,
+      "over_2ms": 779,
+      "over_3ms": 396,
+      "n": 695338
+    },
+    "pulse_cmd_start_late_ms": {
+      "median": 0.0004900136474361716,
+      "p99": 0.5453243698971733,
+      "over_3ms": 188
+    },
+    "pulse_cmd_duration_ms": 0.9547999361529946,
+    "heater_cmd_late_ms": {
+      "median": 1.5512499958276749,
+      "max": 7.346200058236718,
+      "n": 1568
+    },
+    "schedule_slips": 1090,
+    "slip_total_s": 1.9897901700987184,
+    "wall_time_s": 863.6055603000568
+  },
+  "errors_in_faulted_slots": 22,
+  "errors_in_on_time_slots": 5,
+  "misses_by_lateness": [
+    {
+      "late_ms": [
+        0,
+        1
+      ],
+      "received_expected": 120767,
+      "misses": 0
+    },
+    {
+      "late_ms": [
+        1,
+        1.5
+      ],
+      "received_expected": 438421,
+      "misses": 0
+    },
+    {
+      "late_ms": [
+        1.5,
+        2
+      ],
+      "received_expected": 49522,
+      "misses": 0
+    },
+    {
+      "late_ms": [
+        2,
+        3
+      ],
+      "received_expected": 529,
+      "misses": 5
+    },
+    {
+      "late_ms": [
+        3,
+        Infinity
+      ],
+      "received_expected": 517,
+      "misses": 22
+    }
+  ],
+  "controller": {
+    "windows": 3000,
+    "decision_ms_max": 0.7000999758020043,
+    "decision_ms_median": 0.13399997260421515,
+    "heater_ms_max": 7.368299993686378,
+    "settings": {
+      "A": 882,
+      "B": 463,
+      "C": 1014,
+      "D": 641
+    },
+    "heater_changes": 1535,
+    "export_mismatches": [],
+    "export_window0": {
+      "setting": "A",
+      "links": {
+        "1": [
+          2,
+          3
+        ],
+        "3": [
+          4
+        ]
+      }
+    },
+    "live_window0": {
+      "setting": "A",
+      "inp": 1,
+      "hid": 3
+    },
+    "live_counts_equal_export": true
+  },
+  "mapping_check": {
+    "step_links": 25450,
+    "mismatched": 0
+  },
+  "accuracy": {
+    "digits": 100,
+    "software": 0.91,
+    "chip": 0.91,
+    "predictions_changed": 0,
+    "undelivered_spikes": 27,
+    "undelivered_in_faulted_slots": 22,
+    "rerun_reproduces_recorded_h1": "99/100",
+    "note": "all undelivered spikes removed, including timing-faulted slots; false detections map to no neuron and are not added"
+  },
+  "bus": {
+    "packets_total": 1045127,
+    "packets_planned_optical": 609756,
+    "packets_delivered_optical": 609729,
+    "offload_delivered": 0.5834018258068159,
+    "mean_load_pkts_per_ms": 34.83756666666667,
+    "peak_over_mean": 4.248287528692685,
+    "0.8x": {
+      "bus_only": {
+        "mean_ms": 3625.420074012924,
+        "p99_ms": 7714.382997129504
+      },
+      "with_lanes": {
+        "mean_ms": 1.8458982919141247,
+        "p99_ms": 23.21923504033482
+      }
+    },
+    "1.0x": {
+      "bus_only": {
+        "mean_ms": 392.5131339266923,
+        "p99_ms": 1007.4430070985179
+      },
+      "with_lanes": {
+        "mean_ms": 0.5109830951964048,
+        "p99_ms": 11.313510300662042
+      }
+    },
+    "1.2x": {
+      "bus_only": {
+        "mean_ms": 26.5504882331045,
+        "p99_ms": 141.51772043014645
+      },
+      "with_lanes": {
+        "mean_ms": 0.1317791886855218,
+        "p99_ms": 4.629027496179894
+      }
+    },
+    "1.5x": {
+      "bus_only": {
+        "mean_ms": 5.227261616881646,
+        "p99_ms": 41.23191807311455
+      },
+      "with_lanes": {
+        "mean_ms": 0.01473278290580954,
+        "p99_ms": 0.2964600283027825
+      }
+    },
+    "2.0x": {
+      "bus_only": {
+        "mean_ms": 1.1692744446687653,
+        "p99_ms": 17.875552540504657
+      },
+      "with_lanes": {
+        "mean_ms": 5.39606510341167e-05,
+        "p99_ms": 0.0
+      }
+    }
+  }
+}

@@ -300,9 +300,18 @@ def analyze_live(path: Path, fault_ms: float | None = None) -> tuple[dict, list[
     for j in (2, 3, 4):
         other[:, j] = lit[:, [s for s in range(4) if j not in LIVE_DESTS[s]]].any(1)
     # dark gaps at window boundaries: lasers off, nothing should be seen
+    # test only between the last slot's detection window and the next slot's (no overlap with either)
     gs, ge = d["w_gap_start"], d["w_gap_end"]
     per = on_s + off_s
-    gb = [(t0, t0 + per) for g0, g1 in zip(gs, ge) for t0 in np.arange(g0 + L, g1 + L - per + 1e-9, per)]
+    w_end = S_sched + L - S_off / 2 + S_on + S_off                   # end of each slot's window
+    w_beg = S_sched + L - S_off / 2
+    gb = []
+    for g0, g1 in zip(gs, ge):
+        i = np.searchsorted(S_sched, g0) - 1                         # last slot before the gap
+        k = np.searchsorted(S_sched, g1 - 1e-9)                      # first slot after it
+        lo = max(w_end[i], g0 + L - off_s / 2) if i >= 0 else g0 + L    # never before the gap (calibration)
+        hi = w_beg[k] if k < ns else g1 + L
+        gb += [(t0, min(t0 + per, hi)) for t0 in np.arange(lo, hi - 1e-9, per)]
     gb = np.array(gb).reshape(-1, 2)
     gap_det = {j: detect(j, run_ok(j), to_daq(gb[:, 0]), to_daq(gb[:, 1])) if len(gb) else np.zeros(0, bool) for j in (2, 3, 4)}
 
@@ -424,8 +433,11 @@ def analyze_live(path: Path, fault_ms: float | None = None) -> tuple[dict, list[
         lines.append(f"controller check vs export_replay.py skipped: {err}")
 
     # 8. pulse -> neuron mapping check against the spike record
-    sp = np.load(ROOT / "sim" / "spikes_test.npz")
     d0 = meta["digits"][0]
+    with np.load(ROOT / "sim" / "spikes_test.npz") as f:      # load once: NpzFile decompresses per access
+        n_d = (int(meta["steps_done"]) + STEPS_PER_DIGIT - 1) // STEPS_PER_DIGIT
+        sp = {k: f[k][d0:d0 + n_d] for k in ("inp", "h1")}
+    d0 = 0
     m0 = np.where(((np.arange(2312) % 1156) // 34) < 17, 0, 1); m1 = np.where(np.arange(128) < 64, 2, 3)
     bad_map = 0
     order = np.lexsort((p_i, p_sender, p_step))

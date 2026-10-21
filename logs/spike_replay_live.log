@@ -20,3 +20,25 @@
 2026-10-20 22:06:59,544 - INFO - Resetting board lasers (board number 0)
 2026-10-20 22:06:59,551 - INFO - Resetting board PICO-001 (board number 0)
 2026-10-20 22:06:59,583 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-20 22:24:34,913 - INFO - Found 1 NI DAQ device(s):
+2026-10-20 22:24:34,914 - INFO - Name: USB-6210 (33703915) - Device ID = 29295
+2026-10-20 22:24:35,050 - INFO - Found 2 MCC DAQ device(s):
+2026-10-20 22:24:35,050 - INFO - Name: USB-3106 (200C7B0) - Device ID = 159
+2026-10-20 22:24:35,050 - INFO - Name: USB-3114 (1FD2F3C) - Device ID = 164
+2026-10-20 22:24:35,154 - INFO - Searching for connected DAQ boards...
+2026-10-20 22:24:35,170 - INFO - Found 1 serial ports: ['COM3'].
+2026-10-20 22:24:35,274 - INFO - Sent: 'HANDSHAKE' to COM3
+2026-10-20 22:24:35,274 - INFO - Received UID: PICO-001
+2026-10-20 22:24:35,274 - INFO - Found 1 serial DAQ board(s):
+2026-10-20 22:24:35,274 - INFO - Device ID = PICO-001
+2026-10-20 22:24:35,275 - INFO - Initializing board definitions for PICO-001
+2026-10-20 22:24:35,275 - INFO - Resetting initialized DAC/ADCs in parser
+2026-10-20 22:24:35,276 - WARNING - Board PICO-001 does not support VERSION query during handshake (ERROR: Unknown handshake command VERSION). Continuing without version enforcement.
+2026-10-20 22:24:35,276 - INFO - Sent board command: BOARD,DAC,DAC,0,17
+2026-10-20 22:24:36,278 - INFO - Board PICO-001 acknowledged command with: ACK BOARD: type=DAC name=DAC id=0 csPin=17
+2026-10-20 22:24:36,279 - INFO - HSOK: Handshake with PICO-001 successful.
+2026-10-20 22:24:36,324 - INFO - (NETLIST) Entering context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
+2026-10-20 22:39:06,863 - INFO - Resetting board NI (board number Dev1)
+2026-10-20 22:39:06,863 - INFO - Resetting board lasers (board number 0)
+2026-10-20 22:39:06,870 - INFO - Resetting board PICO-001 (board number 0)
+2026-10-20 22:39:06,904 - INFO - (NETLIST) Exiting context manager for netlist with boards: ['NI', 'lasers', 'PICO-001']
